@@ -43,6 +43,24 @@ most about vanilla chat. Further ideas come later.
 From BetterChat we'd also keep, as settings: click-through on the chat window, configurable talk distance, and
 hiding the map ping a shout makes.
 
+## Telling messages apart (Tim's suggestion, 2 Nov 2026)
+
+Every shout is the same stark yellow (forced by `Chat` for shouts), so consecutive messages from different players
+run together, and Tim has missed that a new message was a new one. Two personal settings, so each player sets up
+their own screen:
+
+1. **Hanging indent (on by default).** The sender's name starts at the margin and the message text, including any
+   wrapped lines, is indented after it. Each new message then visibly starts at the margin. Vanilla chat is
+   TextMeshPro text, which supports indent tags, so this is formatting rather than new UI. Optionally a little extra
+   space between messages too.
+2. **Colour per player (accessibility option, off by default).** Each sender gets their own colour from a
+   high-contrast palette, on this player's screen only. Colours are assigned fresh each session, so nothing needs
+   saving: they only have to differ from each other while you play. With 5–6 players on the server there are
+   plenty of distinct colours to go round.
+
+Open: colour just the name, or the whole message? Colouring the whole message hides the channel colour (yellow for
+shouts), so the name alone is probably best, with the channel still shown by the text colour.
+
 ## How it would work (outline)
 
 - Mostly client-side: channels, capitals, the window's visibility and fading, scrolling and tab completion all
