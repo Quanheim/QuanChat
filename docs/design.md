@@ -1,48 +1,44 @@
 # QuanChat: design (brief, draft)
 
-Status: first draft, 2 Nov 2026. Nothing agreed or built. Valheim 1.0.21.
+Status: draft, 2 Nov 2026. Nothing built. Valheim 1.0.21.
 
 ## Purpose
 
-A chat mod for the Quanheim server. It starts from what **BetterChat 1.6.4** (Crystal) does, then adds our own ideas
-(still to collect, see below).
+A chat mod for the Quanheim server with a feature set close to **BetterChat 1.6.4** (Crystal), fixing what bugs us
+most about vanilla chat. Further ideas come later.
 
-## Starting point: BetterChat's features
+## What it does (agreed 2 Nov 2026)
 
-| Feature | Keep? |
-|---|---|
-| How long the chat window stays open after a message; option to keep it always visible. | Likely |
-| Click through the chat window to the UI behind it. | Likely |
-| `/` opens chat with the slash already typed. | Likely |
-| Shout is the default channel; `/say` for local talk. | Discuss: see questions |
-| No forced capitals on shouts, no forced lowercase on whispers. | Likely |
-| Option to hide the map ping a shout makes. | Likely |
-| Configurable talk and whisper distances. | Likely, server-set |
-| Client-side, with optional server-enforced settings. | We'd make it server-synced and version-checked like our other mods |
+1. **Shout is the default.** Typing a message and pressing Enter shouts it to everyone, with no `/s` needed each
+   time. Other channels use a prefix for that one message: `/say` for local talk, `/w <name>` for a whisper.
+2. **No forced capitals on shouts** (and no forced lowercase on whispers). Messages appear as typed.
+3. **Quick to start.** One key opens chat ready to shout, and `/` opens it with the slash already typed for a
+   command or another channel.
+4. **You never miss a message.** When anyone sends a message, the chat window appears on every player's screen
+   straight away, without pressing Enter, then fades out after a set time (configurable). New messages bring it back
+   and restart the timer. Optionally it can stay visible all the time.
+5. **Scrolling.** Page Up and Page Down scroll back through chat history while the window is showing.
+6. **Whispers** work as in BetterChat, with configurable talk and whisper distances. Nice to have rather than
+   essential.
 
-## Goals
+From BetterChat we'd also keep, as settings: click-through on the chat window, and hiding the map ping a shout makes.
 
-1. Everything above that we keep, with the server setting anything that affects other players (distances, pings).
-2. Our own additions (below).
-3. Messages say exactly what happened, for example "Whisper to X failed: not online".
+## How it would work (outline)
 
-## Out of scope (for now)
+- Mostly client-side: the default channel, capitals, the window's visibility and fading, and scrolling all happen on
+  each player's PC.
+- Settings that affect other players (talk and whisper distances, shout pings) are server-synced and admin-locked,
+  as in our other mods. Required on every client, version-checked like the rest of the modpack.
 
-- Voice chat.
-- Changing in-world speech bubbles beyond what the chat changes imply.
+## Later ideas (parked)
+
+Timestamps, private messages to anyone online with `/r` to reply, chat history kept between sessions, a server chat
+log, mentions with a sound, server announcements, a Discord bridge, colours, and filters for join, leave and death
+messages.
 
 ## Where I'd like your input
 
-1. **Your "couple of other ideas".** That's the main gap in this draft. Some common ones, to react to:
-   - **Timestamps** on messages (local or server time).
-   - **Private messages** to a player by name (`/w Name text`), wherever they are, and `/r` to reply.
-   - **Chat history** kept between sessions, and scrollback.
-   - **Server log of chat** for moderation, with timestamps that match our other logs.
-   - **Mentions:** highlight and a sound when someone types your name.
-   - **Server announcements:** restart warnings, events, messages from mods (the chunk loader's limits, QuanCompanions' recall results).
-   - **Discord bridge:** chat to and from a Discord channel.
-   - **Colours** per player or per channel; emotes.
-   - **Filters:** hide join/leave or death messages.
-2. **Default channel.** Keep vanilla's local talk as the default, or BetterChat's shout default?
-3. **Required for everyone?** If chat features change what others see (private messages, announcements), everyone needs it. Purely cosmetic features could work client-only. I'd lean to required, like our other mods.
-4. **Server-side part.** Private messages, logging, history and a Discord bridge all need the server. Which do you want?
+1. **"Quick to start".** I've read point C as: chat opens ready to shout, and people type `/say` or `/w` when they
+   want something else. Is that what you meant, or did you mean the input box should open with `/s` already typed?
+2. **Fade time.** How long should the window stay up after the last message? (BetterChat's setting is a number of
+   seconds; something like 10–15 s is typical.)
