@@ -50,8 +50,8 @@ most about vanilla chat. No other chat mod is in our modpack, so QuanChat has th
 | 14 | Even background | One shade of black over the whole window instead of vanilla's gradient, so it reads the same at idle opacity. Added after test step 10 (Quandru, 7 Nov). |
 | 15 | Window size and position | *Width* and *Height* settings (percent of vanilla's 500 x 400), anchored bottom right. The gap below is half vanilla's, with the same gap on the right. Added 7 Nov. |
 | 16 | Messages fit the window | Only as many messages as fit the window show; the oldest drop off the top instead of spilling above it. A taller window shows more (up to 100). Added 7 Nov. |
-| 18 | Longer messages | Up to 200 characters instead of vanilla's 127 (the input's own limit; nothing else checks length). The floating text over the speaker shows the whole message; to be judged. Added 7 Nov. |
 | 17 | Font size | *Font size* setting in points (vanilla 18); the input box grows with it. Added 7 Nov. |
+| 18 | Longer messages | Up to 200 characters instead of vanilla's 127 (the input's own limit; nothing else checks length). The floating text over the speaker shows the whole message; to be judged. Added 7 Nov. |
 
 ## Later (agreed 7 Nov 2026)
 
@@ -130,8 +130,8 @@ a second player for the multi-player checks.
 | 17 | (0.2.0) Width and Height to 150, then 60 | The window grows left and up, then shrinks, staying anchored bottom right; the input box spans the width. |
 | 18 | (0.2.0) Fill the chat with messages | None spill above the window; the oldest drop off the top. Page Up still scrolls back. |
 | 19 | (0.2.0) Font size to 26, then 12 | Text and input box grow, then shrink; messages still fit. |
-| 21 | (0.2.4) Type a message past 127 characters | It keeps going to 200 and arrives whole for the second player. Judge the floating text over your head at that length. |
 | 20 | (0.2.1) Check the BepInEx log | One line: "Chat window laid out on a ... screen: box 500 x 400, 34 in from the bottom-right corner, ... root found, window <screen size in canvas units>, background made even." |
+| 21 | (0.2.4) Type a message past 127 characters | It keeps going to 200 and arrives whole for the second player. Judge the floating text over your head at that length. |
 
 ## Test results
 
