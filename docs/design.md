@@ -162,3 +162,5 @@ a second player for the multi-player checks.
   sorts last in its section, below Seconds until idle).
 - **7 Nov 2026 (Quandru):** step 18 works: with the window full, the oldest messages drop off the top of the box and
   nothing spills above it.
+- **7 Nov 2026 (Quandru):** Width works too: the box grows to the left from the corner and the text rewraps to fit.
+  Step 17 passed.
