@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. Nothing built yet. Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 built 7 Nov, not yet tested in game: next is the test script below. Valheim 1.0.21.
 
 ## Purpose
 

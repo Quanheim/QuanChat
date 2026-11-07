@@ -1,5 +1,21 @@
-# Valheim plugin template
+# QuanChat
 
-Starting point for a BepInEx/Jotunn Valheim plugin with one repo per mod.
+Valheim chat mod for the Quanheim server: shout by default, sticky `/s` and `/say` channels, messages as typed, a
+chat window that fades instead of vanishing (or stays on screen), scrolling without typing, hanging indent, and no
+shout map pings.
 
-Create a new repo from this template, then follow `docs/DEVELOPMENT.md`, section 3.
+- What it does and its settings: [Package/README.md](Package/README.md) (the Thunderstore page).
+- **What's agreed, what's next, and the test script: [docs/design.md](docs/design.md).**
+- Building and releasing: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
+- Game code it relies on: [docs/valheim-dependencies.md](docs/valheim-dependencies.md).
+
+## Code
+
+| File | What it does |
+|---|---|
+| [Plugin.cs](Plugin.cs) | Start-up: skips everything on a dedicated server, otherwise settings and Harmony. |
+| [Settings.cs](Settings.cs) | The settings, all personal. |
+| [Channels.cs](Channels.cs) | Default and sticky channels, and the channel shown in the chat input. |
+| [ChatWindow.cs](ChatWindow.cs) | Window fade, idle opacity, hiding, click-through, scrolling without typing. |
+| [MessageLayout.cs](MessageLayout.cs) | Hanging indent and the gap between messages. |
+| [Messages.cs](Messages.cs) | Messages as typed, jump to the newest line, no shout map pings. |

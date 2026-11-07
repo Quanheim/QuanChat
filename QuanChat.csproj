@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Framework, references, deploy and packaging come from Directory.Build.props/.targets. -->
+  <PropertyGroup>
+    <AssemblyName>QuanChat</AssemblyName>
+    <RootNamespace>QuanChat</RootNamespace>
+
+    <!-- The ONLY place to bump the version: feeds the plugin attribute and the generated manifest.json -->
+    <Version>0.1.0</Version>
+
+    <!-- Thunderstore manifest description: max 250 characters, no double quotes. -->
+    <ThunderstoreDescription>Chat you don't miss: shout by default, sticky /s and /say channels, no forced capitals, a chat window that fades instead of vanishing (or stays on screen), scrolling without typing, hanging indent and no shout map pings.</ThunderstoreDescription>
+    <!-- Becomes website_url in manifest.json: the Thunderstore page's link to the repo (and its Issues).
+         Leave empty to use this repo's git remote automatically; set it only to point somewhere else. -->
+    <RepoUrl></RepoUrl>
+  </PropertyGroup>
+
+  <!-- Game and Unity UI code the chat patches use -->
+  <ItemGroup>
+    <Reference Include="assembly_utils"><HintPath>$(ManagedDir)\assembly_utils.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="gui_framework"><HintPath>$(ManagedDir)\gui_framework.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.TextMeshPro"><HintPath>$(ManagedDir)\Unity.TextMeshPro.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.UI"><HintPath>$(ManagedDir)\UnityEngine.UI.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.UIModule"><HintPath>$(ManagedDir)\UnityEngine.UIModule.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>
