@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2 - 2026-11-07
+
+- Fixed: in 0.2.1 the chat box sat half off the bottom-right of the screen. It now sits in the corner with an even
+  gap.
+
 ## 0.2.1 - 2026-11-07
 
 - Fixed: in 0.2.0 the chat window filled the whole width of the screen. It's back to the game's size by default,

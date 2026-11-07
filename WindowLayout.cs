@@ -42,7 +42,7 @@ namespace QuanChat
 
             __instance.m_maxVisibleBufferLength = MaxMessages;
             Apply(__instance, log: false);
-            _laidOutFor = default; // lay out again on the first frame, when the screen canvas has its size
+            _laidOutFor = default; // lay out and log again on the first frame, when the window has its real size
             _loggedSettled = false;
         }
 
@@ -52,7 +52,7 @@ namespace QuanChat
                 Apply(Chat.instance, log: false);
         }
 
-        // Called every frame from ChatWindow: lays out again once the screen canvas has its real size (it may
+        // Called every frame from ChatWindow: lays out again once the window has its real size (it may
         // not at login) and whenever the resolution changes.
         private static Vector2Int _laidOutFor;
         private static bool _loggedSettled;
@@ -74,19 +74,16 @@ namespace QuanChat
                                        _vanillaSize.y * Settings.Height.Value / 100f);
 
             // Chat_box carries its own Canvas, which Unity stretches to the whole screen, so its own size and
-            // position are ignored (0.2.0 learned that the hard way). The visible box is "root": place its
-            // bottom-right corner `edge` in from the screen's bottom-right corner, in the screen canvas's units.
+            // position are ignored (0.2.0 filled the screen width). The visible box is "root": anchor it to
+            // Chat_box's bottom-right corner, `edge` in from each side, and Unity keeps it there at any resolution.
+            // (0.2.1 measured the screen canvas instead, but GetComponentInParent skips the hidden window.)
             RectTransform window = chat.m_chatWindow;
             RectTransform root = window.Find("root") as RectTransform;
-            Canvas canvas = window.GetComponentInParent<Canvas>();
-            RectTransform screen = canvas != null ? canvas.rootCanvas.transform as RectTransform : null;
-            if (root != null && screen != null)
+            if (root != null)
             {
-                Rect area = screen.rect;
-                root.anchorMin = root.anchorMax = new Vector2(0.5f, 0.5f);
-                root.pivot = new Vector2(1f, 0f);
+                root.anchorMin = root.anchorMax = root.pivot = new Vector2(1f, 0f);
+                root.anchoredPosition = new Vector2(-edge, edge);
                 root.sizeDelta = size;
-                root.position = screen.TransformPoint(new Vector3(area.xMax - edge, area.yMin + edge, 0f));
                 if (root.GetComponent<RectMask2D>() == null)
                     root.gameObject.AddComponent<RectMask2D>(); // backstop: nothing draws outside the box
             }
@@ -125,8 +122,8 @@ namespace QuanChat
                                    $"{size.x:0} x {size.y:0}, {edge:0} in from the bottom-right corner, text area " +
                                    $"{chat.m_output.rectTransform.rect.width:0} x " +
                                    $"{chat.m_output.rectTransform.rect.height:0}, input {inputHeight:0} high, " +
-                                   $"root {(root != null ? "found" : "MISSING")}, screen canvas " +
-                                   $"{(screen != null ? $"{screen.rect.width:0} x {screen.rect.height:0}" : "MISSING")}, " +
+                                   $"root {(root != null ? "found" : "MISSING")}, window (should match the screen in canvas units) " +
+                                   $"{window.rect.width:0} x {window.rect.height:0}, " +
                                    $"background {(bkg != null ? "made even" : "MISSING")}.");
         }
 
