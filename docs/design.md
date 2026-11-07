@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 4 passed (see Test results). Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 5 passed (see Test results). Valheim 1.0.21.
 
 ## Purpose
 
@@ -126,3 +126,5 @@ a second player for the multi-player checks.
   join shout "I have arrived!" in normal case.
 - **7 Nov 2026 (Quandru):** step 4 works: "[Say] …" placeholder, the grey channel notice, and `one`/`two` as
   local talk (white, floating text over the speaker).
+- **7 Nov 2026 (Quandru):** step 5 works: back to "[Shout] …", and `three` is a shout. Its floating text over the
+  speaker is in normal case too (part of step 7).
