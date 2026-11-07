@@ -105,6 +105,18 @@ namespace QuanChat
             input.sizeDelta = new Vector2(0f, inputHeight);
             chat.m_input.pointSize = _vanillaInputFontSize * fontScale;
 
+            // Typed text keeps the same side padding as the messages. Vanilla's text area clips 8 units beyond its
+            // edges (negative RectMask2D padding), so a long line ran right to the box's edge.
+            RectTransform typed = chat.m_input.textViewport;
+            if (typed != null)
+            {
+                typed.offsetMin = new Vector2(TextPadding, typed.offsetMin.y);
+                typed.offsetMax = new Vector2(-TextPadding, typed.offsetMax.y);
+                RectMask2D clip = typed.GetComponent<RectMask2D>();
+                if (clip != null)
+                    clip.padding = Vector4.zero;
+            }
+
             TextMeshProUGUI output = chat.m_output;
             RectTransform text = output.rectTransform;
             text.anchorMin = Vector2.zero;

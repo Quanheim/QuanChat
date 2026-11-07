@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.3 - 2026-11-07
+
+- The chat stays on screen while the mod settings window (Configuration Manager) is open, even over the Esc menu,
+  so setting changes show as you make them.
+- Typed text in the chat input keeps the same side padding as the messages.
+
 ## 0.2.2 - 2026-11-07
 
 - Fixed: in 0.2.1 the chat box sat half off the bottom-right of the screen. It now sits in the corner with an even

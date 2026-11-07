@@ -59,7 +59,7 @@ a change in behaviour isn't, so list the ones whose behaviour the mod depends on
 | `Player.InIntro` | Hide the window during the intro. |
 | `Player.InCutscene` | Hide the window in cutscenes. |
 | `Hud.m_userHidden` | Hide the window with the HUD (Ctrl+F3). |
-| `Menu.IsVisible` | Hide the window in the Esc menu. |
+| `Menu.IsVisible` | Hide the window in the Esc menu (unless the Configuration Manager window is open). |
 | `Minimap.IsOpen` | Hide the window under the big map (unless typing). |
 | `Minimap.InTextInput` | No scrolling while typing a pin name. |
 | `Console.IsVisible` | No scrolling while the F5 console is open. |
@@ -92,6 +92,8 @@ after each update.
 |---|---|---|
 | Chat window (`Chat.m_chatWindow`, `Chat_box` in the main scene) | Gets a `CanvasGroup` added for alpha and click-through. Its stored size (500 x 400) and bottom gap (67) are read at login as the base for Width, Height and the new gap. It has its own Canvas, so at runtime it covers the screen; we don't move it. | Something else drives a CanvasGroup on it, or the window is restructured. |
 | Chat window children `root` and `root/bkg` (an `Image`) | `root` is the visible box: anchored and pivoted to Chat_box's bottom-right corner, `anchoredPosition` (-gap, gap), sized from the settings, and given a `RectMask2D`. Laid out again on the first frame and on resolution changes. `bkg` is stretched to fill it and its gradient sprite cleared, keeping its colour. | Renamed or moved: the log line says `MISSING` and the background keeps its gradient. |
+| Chat input text area (`m_input.textViewport`, "Text Area") | Side offsets set to the message padding; its `RectMask2D` padding (vanilla -8, clipping beyond its edges) set to 0. | Restructured: long typed lines run to the edge again. |
 | Chat output and input rects (`m_output`, `m_input`) | Set explicitly: input a strip along the bottom, its height vanilla's (35.5) scaled with font size; output fills the space above, 6 units in from the edges, margin cleared. Vanilla's stored child positions don't match what's drawn, so none are kept. | The window is rebuilt differently: check sizes in game. |
 | Chat input placeholder (`m_input.placeholder`, a TextMeshPro text) | Shows `[Shout]` / `[Say]` before vanilla's placeholder text. | The placeholder stops being TextMeshPro text: the indicator silently stops. |
+| BepInEx Configuration Manager (`com.bepis.bepinex.configurationmanager`, optional mod) | Its public `DisplayingWindow` property, read by reflection, keeps the chat up while its window is open. | Renamed: the chat hides behind the Esc menu again while changing settings. |
 | Key bindings `ScrollChatUp`, `ScrollChatDown` (Page Up, Page Down) | Scrolling without typing. | Renamed in `ZInput`. |

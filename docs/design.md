@@ -156,4 +156,5 @@ a second player for the multi-player checks.
   to Chat_box's bottom-right corner instead (Chat_box covers the screen).
 - **7 Nov 2026 (Quandru), 0.2.2:** right size (500 x 400) and place on login, even background (step 16 passes),
   input box along the bottom. Seen in the screenshot: a long line in the input runs to the box's left edge with
-  no padding.
+  no padding. Opening the mod settings window (from the Esc menu) hid the chat, so changes couldn't be seen.
+  0.2.3 keeps the chat up while the Configuration Manager window is open, and pads the typed text.

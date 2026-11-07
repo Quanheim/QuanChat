@@ -62,17 +62,41 @@ namespace QuanChat
         }
 
         // Hidden with the HUD (Ctrl+F3) and in cutscenes, during the intro, in the Esc menu, and under the big
-        // map. While typing it stays up unless the menu is open, so you can always see what you're writing.
+        // map. While typing, or while the mod settings window is open, it stays up (except in the intro).
         private static bool IsHidden(bool typing)
         {
             Player player = Player.m_localPlayer;
-            if (player == null || player.InIntro() || Menu.IsVisible())
+            if (player == null || player.InIntro())
                 return true;
-            if (typing)
+            // While the mod settings window is open the chat stays up, so setting changes show as you make them.
+            if (typing || SettingsWindowOpen())
                 return false;
+            if (Menu.IsVisible())
+                return true;
             if (Hud.instance != null && Hud.instance.m_userHidden)
                 return true;
             return player.InCutscene() || Minimap.IsOpen();
+        }
+
+        // BepInEx Configuration Manager (F1, or "Mod settings"), if installed: its public DisplayingWindow property.
+        private const string ConfigurationManagerGuid = "com.bepis.bepinex.configurationmanager";
+        private static bool _lookedForSettingsWindow;
+        private static object _configurationManager;
+        private static PropertyInfo _displayingWindow;
+
+        private static bool SettingsWindowOpen()
+        {
+            if (!_lookedForSettingsWindow)
+            {
+                _lookedForSettingsWindow = true;
+                if (BepInEx.Bootstrap.Chainloader.PluginInfos.TryGetValue(ConfigurationManagerGuid, out var info) &&
+                    info.Instance != null)
+                {
+                    _configurationManager = info.Instance;
+                    _displayingWindow = AccessTools.Property(info.Instance.GetType(), "DisplayingWindow");
+                }
+            }
+            return _displayingWindow != null && _displayingWindow.GetValue(_configurationManager) is bool open && open;
         }
 
         // Vanilla only reads Page Up / Page Down while you're typing (Terminal.UpdateInput).
