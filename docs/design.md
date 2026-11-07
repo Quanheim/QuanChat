@@ -1,80 +1,120 @@
-# QuanChat: design (brief, draft)
+# QuanChat: design
 
-Status: draft, 2 Nov 2026. Nothing built. Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. Nothing built yet. Valheim 1.0.21.
 
 ## Purpose
 
 A chat mod for the Quanheim server with a feature set close to **BetterChat 1.6.4** (Crystal), fixing what bugs us
-most about vanilla chat. Further ideas come later.
+most about vanilla chat. No other chat mod is in our modpack, so QuanChat has the chat to itself.
 
 ## What vanilla does today (from `Chat` and `Terminal`)
 
-- **Three message types:** normal talk (`/say`, reaches players nearby only), shout (`/s`, reaches everyone) and
-  whisper (`/w`, quieter local talk; despite its help text it isn't a private message to a named player).
-- **The default is normal talk**, so an untagged message only reaches players in range. Far-away players never see
-  it. That's most likely why messages get missed: they were never delivered, not hidden.
-- **Shouts are forced to capitals** and whispers to lowercase (`Chat`, when it shows a message).
-- **New messages already pop the chat window up** for 10 seconds (`Chat.m_hideDelay`), except pings.
+- **Three message types:** normal talk (`/say`, reaches players within 15 m), shout (`/s`, reaches everyone) and
+  whisper (`/w`, 4 m; despite its help text it isn't a private message to a named player).
+- **The default is normal talk**, so an untagged message only reaches players in range. That's most likely why
+  messages get missed: they were never delivered, not hidden.
+- **Shouts are forced to capitals** and whispers to lowercase, both in the chat window (`Terminal.AddString`) and in
+  the floating text over the speaker (`Chat.AddInworldText`).
+- **Every shout flashes a pin on the big map** at the sender (`Minimap.UpdateShoutPins` reads
+  `Chat.GetShoutWorldTexts`) for the 5 s its floating text lasts (`Chat.m_worldTextTTL`).
+- **Floating text over the speaker** shows for every message type to players within 50 m or with the map open
+  (`Chat.OnNewChatMessage`, `Minimap.m_nomapPingDistance`).
+- **The window hides 10 s after the last message** (`Chat.m_hideDelay`, `m_hideTimer`); new messages bring it back,
+  except pings.
+- **Page Up / Page Down scroll** the history (`ScrollChatUp`/`ScrollChatDown`), but only while typing: the input
+  handling lives in `Terminal.Update`'s focused branch. History is 300 lines, 20 visible.
+- **Shouts go straight from sender to each player** (`Chat.SendText` → one routed RPC per player). The server only
+  forwards routed RPCs (`ZRoutedRpc.RPC_RoutedRPC`); it needs no handler of its own.
+- **Incoming text has `<` and `>` replaced with spaces**, so players can't inject formatting tags. Any formatting we
+  add is applied locally.
 - **Tab completion exists:** chat runs on the console's command system, which completes commands and their
-  arguments, filtered by what you've typed so far (`Terminal`, `ConsoleCommand` option lists).
+  arguments (`Terminal`, `ConsoleCommand` option lists).
 
-## What it does (agreed 2 Nov 2026)
+## v1 (agreed 7 Nov 2026)
 
-1. **Shout is the default channel**, so chat is server-wide unless you choose otherwise. Typing a message and
-   pressing Enter shouts it.
-2. **Sticky channels, World of Warcraft style.**
-   - `/say hello` sends one message as local talk and leaves your channel as it was.
-   - `/say` on its own, then Enter, **switches** your channel: every untagged message after that goes as local talk,
-     until you switch again (`/s` back to shout).
-   - The current channel shows beside the chat input, so you always know where a message will go.
-   - The server sets the default channel each player starts with on login (config, shout by default).
-3. **No forced capitals on shouts** (and no forced lowercase on whispers). Messages appear as typed.
-4. **You don't miss messages.** Any new message brings the chat window up on every player's screen, without pressing
-   Enter, and it stays for **30 seconds** after the latest message (configurable), long enough to read after a
-   fight. Optionally it can stay visible all the time.
-5. **Scrolling.** Page Up and Page Down scroll back through chat history while the window is showing.
-6. **Private messages, nice to have:** `/w <name> <message>` sends a message to one player wherever they are.
-   - **Tab completion of names:** after `/w `, Tab cycles through the players online now, and typing the first
-     letters narrows the list first. This reuses vanilla's tab completion, with the online player list as the
-     options, so it's very doable.
-   - This takes over `/w` from vanilla's quiet local whisper, which we don't use. Delivery goes through the server to
-     that one player.
+| # | Feature | What it means |
+|---|---|---|
+| 1 | Shout is the default channel | Typing a message and pressing Enter sends it to everyone on the server. |
+| 2 | One-off channel messages | `/say hello` sends that one message as local talk (15 m) and leaves your channel as it was. Likewise `/s hello`. |
+| 3 | Sticky channel switching | `/say` on its own, then Enter, makes local talk your channel for every later untagged message. `/s` on its own switches back to shout. WoW style. |
+| 4 | Channel indicator | The empty chat input shows your channel as placeholder text, e.g. "[Shout] …". To be judged in the test. |
+| 5 | Starting channel from the server | Every login starts you in the server's starting channel (shout by default). Your sticky choice isn't remembered between logins. |
+| 6 | Messages as typed | No forced capitals on shouts or lowercase on whispers, in the window or the floating text. |
+| 7 | Window visibility | A new message shows the window at full opacity. After *Seconds until idle* (30 s) it fades: **out entirely** by default, or with *Always show* on, **to the idle opacity** (50 %) and stays there until the next message. |
+| 8 | Hidden when it should be | The window hides with the HUD (Ctrl+F3), during the intro and in menus, and sits **under the big map**, not over it. |
+| 9 | Scroll without typing | Page Up / Page Down scroll the window whenever it's showing, not only while typing. A new message jumps back to the bottom. |
+| 10 | Click-through | The window doesn't catch mouse clicks while you're not typing in it. |
+| 11 | Hide shout map pings | Shouts don't flash a pin on your map. The floating text over a nearby speaker stays. Personal, on by default. |
+| 12 | Hanging indent | The sender's name starts at the margin and the message, wrapped lines included, is indented after it, so each new message visibly starts at the margin. TextMeshPro `<indent>`/`<line-indent>` tags. |
+| 13 | Space between messages | A small gap, about half a line, between messages. TextMeshPro `<line-height>` or `<space>`-style tags. |
 
-From BetterChat we'd also keep, as settings: click-through on the chat window, configurable talk distance, and
-hiding the map ping a shout makes.
+## Later (agreed 7 Nov 2026)
 
-## Telling messages apart (Tim's suggestion, 2 Nov 2026)
+- **Private messages, the first update:** `/w <name> <message>` reaches one player wherever they are; nobody else
+  sees it, admins included. It takes over vanilla's `/w`, so the 4 m whisper channel goes. Sent as a routed RPC to
+  that player's peer; the server only forwards it, and QuanChat never logs it. (It still crosses the network as plain
+  text, as all Valheim chat does.)
+- **Tab completion of names** for `/w`: Tab cycles through online players, narrowed by what you've typed.
+- **Colour per player** (accessibility): each sender's name in its own colour, on your screen only, assigned fresh
+  each session. Name only, so yellow still means shout.
+- **Talk distance** as a server setting (vanilla 15 m).
+- **Parked:** timestamps, `/r` to reply to the last private message, history kept between sessions, a server chat
+  log (**must exclude private messages**), mentions with a sound, server announcements, a Discord bridge, colours,
+  filters for join, leave and death messages.
 
-Every shout is the same stark yellow (forced by `Chat` for shouts), so consecutive messages from different players
-run together, and Tim has missed that a new message was a new one. Two personal settings, so each player sets up
-their own screen:
+## Settings
 
-1. **Hanging indent (on by default).** The sender's name starts at the margin and the message text, including any
-   wrapped lines, is indented after it. Each new message then visibly starts at the margin. Vanilla chat is
-   TextMeshPro text, which supports indent tags, so this is formatting rather than new UI. Optionally a little extra
-   space between messages too.
-2. **Colour per player (accessibility option, off by default).** Each sender gets their own colour from a
-   high-contrast palette, on this player's screen only. Colours are assigned fresh each session, so nothing needs
-   saving: they only have to differ from each other while you play. With 5–6 players on the server there are
-   plenty of distinct colours to go round.
+Per the template convention (`docs/DEVELOPMENT.md`, "Config files"). Only one setting affects other players.
 
-Open: colour just the name, or the whole message? Colouring the whole message hides the channel colour (yellow for
-shouts), so the name alone is probably best, with the channel still shown by the text colour.
+| Section | Setting | Default | Enforced / Personal | Description |
+|---|---|---|---|---|
+| `0 - General` | Starting channel | Shout | Enforced | The channel every player starts in at login. Shout reaches everyone; Say reaches players within 15 m. Synced from the server; admins only. |
+| `1 - Window (personal)` | Always show | Off | Personal | Off: the chat window fades out entirely once it's idle. On: it stays on screen at the idle opacity. |
+| | Seconds until idle | 30 | Personal | How long the window stays at full opacity after the newest message (5–300). |
+| | Idle opacity | 50 % | Personal | How visible the window stays once idle, when Always show is on (10–100 %). |
+| | Click-through | On | Personal | The chat window ignores mouse clicks while you aren't typing. |
+| `2 - Messages (personal)` | Hanging indent | On | Personal | Indent each message after the sender's name, so new messages start at the margin. |
+| | Space between messages | On | Personal | A small gap between messages. |
+| | Hide shout map pings | On | Personal | Shouts don't flash a pin on your map. |
 
 ## How it would work (outline)
 
-- Mostly client-side: channels, capitals, the window's visibility and fading, scrolling and tab completion all
-  happen on each player's PC.
-- Server side: the default channel at login, talk distance and shout pings (server-synced and admin-locked, as in our
-  other mods), and routing private messages to the right player. Required on every client, version-checked like the
-  rest of the modpack.
+- **Client-side, nearly all of it:** channels, formatting, the window, scrolling and click-through patch `Chat` and
+  `Terminal` on each player's PC. The server only syncs the starting channel.
+- **Channels:** our own state (current channel) decides the type for untagged input; `/say` and `/s` are replaced
+  so that with no text they switch channel instead of sending an empty message.
+- **No forced case:** replace the case changes in `Terminal.AddString(title, text, type)` and
+  `Chat.AddInworldText`, keeping the colours.
+- **Window:** take over `m_hideTimer`'s effect in `Chat.Update` (the window stays active) and drive a `CanvasGroup`
+  alpha instead; hide on HUD-hidden, intro and menus.
+- **Under the map:** to find out in the POC how the chat and large-map canvases are ordered; if they can't be
+  reordered, hide the window while the large map is open (same result, since the map is full-screen), except while
+  typing.
+- **Required on every client and the server**, version-checked like the rest of the modpack.
 
-## Later ideas (parked)
+## Test script (POC)
 
-Timestamps, `/r` to reply to the last private message, chat history kept between sessions, a server chat log,
-mentions with a sound, server announcements, a Discord bridge, colours, and filters for join, leave and death
-messages.
+Release zip imported into a Gale test profile (not Debug-deployed), local dedicated server or the test server, plus
+a second player for the multi-player checks.
+
+| # | Do | Expect |
+|---|---|---|
+| 1 | Log in, type `hello`, Enter | Placeholder showed "[Shout] …" before typing. Second player, anywhere, sees `hello` in normal case and yellow. |
+| 2 | **Judge the channel indicator** | Is the placeholder readable and clear enough? Decide whether it needs proper UI. |
+| 3 | `/say hi`, then an untagged `back` | `hi` reaches only players within 15 m; `back` is a shout again. |
+| 4 | `/say` alone, Enter; then `one`, `two` | Placeholder shows "[Say] …"; both messages are local talk. |
+| 5 | `/s` alone, Enter; then `three` | Placeholder back to "[Shout] …"; `three` reaches everyone. |
+| 6 | Relog after step 4 | You start in Shout again. |
+| 7 | Shout with Caps Lock off and on, mixed case | Shown exactly as typed, in the window and over your head. |
+| 8 | Second player shouts while your big map is open | No pin flashes on your map. Turn *Hide shout map pings* off: the pin flashes. |
+| 9 | Wait after a message (Always show off) | Full opacity for 30 s, then the window fades out entirely. |
+| 10 | Always show on, idle opacity 50 % | After 30 s it fades to half and stays. A new message brings it back to full. Change both settings: they apply. |
+| 11 | Ctrl+F3; Esc menu; open the big map | The chat window hides with the HUD, in the menu, and doesn't show over the map. |
+| 12 | Page Up / Page Down without opening chat | The window scrolls back and forward; a new message jumps to the bottom. |
+| 13 | Click where the window overlaps something (e.g. with the inventory open) | The click goes through. |
+| 14 | Several messages from two players, some long enough to wrap | Each starts at the margin; wrapped lines are indented; a half-line gap between messages. Turn each setting off: back to vanilla layout. |
+| 15 | Change *Starting channel* to Say on the server, relog | You start in Say. A non-admin can't change it. |
 
 ## Open
 
-- Exact layout of the channel indicator beside the input.
+- Final layout of the channel indicator, after test step 2.
