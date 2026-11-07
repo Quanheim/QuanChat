@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 6 passed (see Test results). Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 7 and 9 passed (see Test results). Valheim 1.0.21.
 
 ## Purpose
 
@@ -130,3 +130,5 @@ a second player for the multi-player checks.
   speaker is in normal case too (part of step 7).
 - **7 Nov 2026 (Quandru):** step 6 works: switched to Say and sent `test before logout`, relogged, started in
   Shout.
+- **7 Nov 2026 (Quandru):** step 7 works: `small letters`, `Mixed Case Throughout` and `I AM FEELING SHOUTY`
+  shown as typed in the window and over the speaker. Step 9 works: the window fades as it should.
