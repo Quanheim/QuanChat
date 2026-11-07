@@ -131,4 +131,4 @@ a second player for the multi-player checks.
 - **7 Nov 2026 (Quandru):** step 6 works: switched to Say and sent `test before logout`, relogged, started in
   Shout.
 - **7 Nov 2026 (Quandru):** step 7 works: `small letters`, `Mixed Case Throughout` and `I AM FEELING SHOUTY`
-  shown as typed in the window and over the speaker. Step 9 works: the window fades as it should.
+  shown as typed in the window and over the speaker. Step 9 works: the window fades out completely.
