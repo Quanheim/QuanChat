@@ -20,6 +20,9 @@ namespace QuanChat
         // Vanilla shows at most 20 messages; we show as many as fit the window (MessageLayout trims to fit).
         private const int MaxMessages = 100;
         private const float TextPadding = 6f;
+        // Vanilla's chat input (ChatInput in the main scene) stops at 127 characters. Only the input limits it:
+        // nothing in Chat, the routed RPC or the server checks length.
+        private const int MaxMessageLength = 200;
 
         private static Vector2 _vanillaSize;
         private static float _vanillaBottom;
@@ -41,6 +44,7 @@ namespace QuanChat
             _vanillaInputFontSize = __instance.m_input.pointSize;
 
             __instance.m_maxVisibleBufferLength = MaxMessages;
+            __instance.m_input.characterLimit = MaxMessageLength;
             Apply(__instance, log: false);
             _laidOutFor = default; // lay out and log again on the first frame, when the window has its real size
             _loggedSettled = false;

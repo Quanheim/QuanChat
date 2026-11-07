@@ -20,6 +20,7 @@ connect. On a dedicated server it does nothing except keep everyone's version in
   with *Width* and *Height*, and messages never spill above it.
 - **Scroll without typing.** Page Up and Page Down scroll back through chat any time the window can show. A new
   message jumps back to the newest line.
+- **Longer messages.** Up to 200 characters instead of the game's 127.
 - **Your font size.** Set the chat text size you like.
 - **Easier to tell messages apart.** Each message starts at the margin with its wrapped lines indented, and there's
   a small gap between messages.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4 - 2026-11-07
+
+- Messages can be up to 200 characters (the game stops at 127).
+
 ## 0.2.3 - 2026-11-07
 
 - The chat stays on screen while the mod settings window (Configuration Manager) is open, even over the Esc menu,
