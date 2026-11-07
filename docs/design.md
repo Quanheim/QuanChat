@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 built 7 Nov, not yet tested in game: next is the test script below. Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 and 3 passed (see Test results). Valheim 1.0.21.
 
 ## Purpose
 
@@ -37,7 +37,7 @@ most about vanilla chat. No other chat mod is in our modpack, so QuanChat has th
 | 1 | Shout is the default channel | Typing a message and pressing Enter sends it to everyone on the server. |
 | 2 | One-off channel messages | `/say hello` sends that one message as local talk (15 m) and leaves your channel as it was. Likewise `/s hello`. |
 | 3 | Sticky channel switching | `/say` on its own, then Enter, makes local talk your channel for every later untagged message. `/s` on its own switches back to shout. WoW style. |
-| 4 | Channel indicator | The empty chat input shows your channel as placeholder text, e.g. "[Shout] …". To be judged in the test. |
+| 4 | Channel indicator | The empty chat input shows your channel as placeholder text, e.g. "[Shout] …". Judged clear and readable in the test (7 Nov). |
 | 5 | Starting channel | Every login starts you in your *Starting channel* setting (Shout when the config file is first created; each player can change it). Your sticky choice during play isn't remembered between logins. |
 | 6 | Messages as typed | No forced capitals on shouts or lowercase on whispers, in the window or the floating text. |
 | 7 | Window visibility | A new message shows the window at full opacity. After *Seconds until idle* (30 s) it fades: **out entirely** by default, or with *Always show* on, **to the idle opacity** (50 %) and stays there until the next message. |
@@ -119,6 +119,8 @@ a second player for the multi-player checks.
 | 14 | Several messages from two players, some long enough to wrap | Each starts at the margin; wrapped lines are indented; a half-line gap between messages. Turn each setting off: back to vanilla layout. |
 | 15 | Change your *Starting channel* to Say, relog | You start in Say. The second player still starts in Shout. |
 
-## Open
+## Test results
 
-- Final layout of the channel indicator, after test step 2.
+- **7 Nov 2026 (Quandru):** step 2, the placeholder is clear and readable, so it stays as the channel indicator.
+  Step 3 works. Screenshots also showed the hanging indent on wrapped lines, the gap between messages, and the
+  join shout "I have arrived!" in normal case.
