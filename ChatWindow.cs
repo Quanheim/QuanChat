@@ -28,6 +28,7 @@ namespace QuanChat
             RectTransform window = __instance.m_chatWindow;
             if (window == null)
                 return;
+            WindowLayout.KeepInPlace(__instance);
 
             // Vanilla shows the input while you're typing and hides it when you send or close.
             bool typing = __instance.m_input != null && __instance.m_input.gameObject.activeSelf;

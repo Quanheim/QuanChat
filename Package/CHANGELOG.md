@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 - 2026-11-07
+
+- Fixed: in 0.2.0 the chat window filled the whole width of the screen. It's back to the game's size by default,
+  in the bottom-right corner.
+
 ## 0.2.0 - 2026-11-07
 
 - The chat window's background is one even shade instead of a gradient, so it reads the same at idle opacity.

@@ -5,7 +5,7 @@
     <RootNamespace>QuanChat</RootNamespace>
 
     <!-- The ONLY place to bump the version: feeds the plugin attribute and the generated manifest.json -->
-    <Version>0.2.0</Version>
+    <Version>0.2.1</Version>
 
     <!-- Thunderstore manifest description: max 250 characters, no double quotes. -->
     <ThunderstoreDescription>Chat you don't miss: shout by default, sticky /s and /say channels, no forced capitals, a chat window that fades instead of vanishing (or stays on screen), scrolling without typing, hanging indent and no shout map pings.</ThunderstoreDescription>

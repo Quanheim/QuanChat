@@ -7,11 +7,13 @@ namespace QuanChat
 {
     // The chat window's size, position, background and font size.
     //
-    // Vanilla's window (Chat_box, from the main scene) is 500 x 400, anchored bottom right, 67 units above the
-    // bottom edge and flush with the right. It holds "root", which holds "bkg" (a black image whose sprite is a
-    // gradient), "Text" (the output, 18 pt) and "ChatInput" (20 pt, a fixed 500 wide). Its stored child positions
-    // don't match what's on screen, so rather than adjust them this sets every rect explicitly: the background
-    // fills the window, the input is a strip along the bottom, and the output fills the space above it.
+    // Vanilla's window (Chat_box, from the main scene) is stored as 500 x 400, anchored bottom right, 67 units
+    // above the bottom edge. It has its own Canvas, so at runtime it covers the screen and those values are only
+    // the base for our Width, Height and gap. The visible box is its child "root", which holds "bkg" (a black
+    // image whose sprite is a gradient), "Text" (the output, 18 pt) and "ChatInput" (20 pt, a fixed 500 wide).
+    // The stored child positions don't match what's drawn, so this sets every rect explicitly: root placed from
+    // the screen's bottom-right corner, the background filling it, the input a strip along its bottom, and the
+    // output filling the space above.
     [HarmonyPatch(typeof(Chat), nameof(Chat.Awake))]
     internal static class WindowLayout
     {
@@ -39,13 +41,28 @@ namespace QuanChat
             _vanillaInputFontSize = __instance.m_input.pointSize;
 
             __instance.m_maxVisibleBufferLength = MaxMessages;
-            Apply(__instance, log: true);
+            Apply(__instance, log: false);
+            _laidOutFor = default; // lay out again on the first frame, when the screen canvas has its size
+            _loggedSettled = false;
         }
 
         internal static void Refresh()
         {
             if (Chat.instance != null && _vanillaFontSize > 0f)
                 Apply(Chat.instance, log: false);
+        }
+
+        // Called every frame from ChatWindow: lays out again once the screen canvas has its real size (it may
+        // not at login) and whenever the resolution changes.
+        private static Vector2Int _laidOutFor;
+        private static bool _loggedSettled;
+
+        internal static void KeepInPlace(Chat chat)
+        {
+            if (_vanillaFontSize <= 0f || (_laidOutFor.x == Screen.width && _laidOutFor.y == Screen.height))
+                return;
+            Apply(chat, log: !_loggedSettled);
+            _loggedSettled = true;
         }
 
         private static void Apply(Chat chat, bool log)
@@ -56,18 +73,24 @@ namespace QuanChat
             Vector2 size = new Vector2(_vanillaSize.x * Settings.Width.Value / 100f,
                                        _vanillaSize.y * Settings.Height.Value / 100f);
 
+            // Chat_box carries its own Canvas, which Unity stretches to the whole screen, so its own size and
+            // position are ignored (0.2.0 learned that the hard way). The visible box is "root": place its
+            // bottom-right corner `edge` in from the screen's bottom-right corner, in the screen canvas's units.
             RectTransform window = chat.m_chatWindow;
-            window.anchorMin = window.anchorMax = window.pivot = new Vector2(1f, 0f);
-            window.anchoredPosition = new Vector2(-edge, edge);
-            window.sizeDelta = size;
-
             RectTransform root = window.Find("root") as RectTransform;
-            if (root != null)
+            Canvas canvas = window.GetComponentInParent<Canvas>();
+            RectTransform screen = canvas != null ? canvas.rootCanvas.transform as RectTransform : null;
+            if (root != null && screen != null)
             {
-                Fill(root);
+                Rect area = screen.rect;
+                root.anchorMin = root.anchorMax = new Vector2(0.5f, 0.5f);
+                root.pivot = new Vector2(1f, 0f);
+                root.sizeDelta = size;
+                root.position = screen.TransformPoint(new Vector3(area.xMax - edge, area.yMin + edge, 0f));
                 if (root.GetComponent<RectMask2D>() == null)
-                    root.gameObject.AddComponent<RectMask2D>(); // backstop: nothing draws outside the window
+                    root.gameObject.AddComponent<RectMask2D>(); // backstop: nothing draws outside the box
             }
+            _laidOutFor = new Vector2Int(Screen.width, Screen.height);
 
             // One even shade over the whole window instead of vanilla's gradient: same colour and opacity.
             Image bkg = (root != null ? root : window).Find("bkg")?.GetComponent<Image>();
@@ -98,10 +121,13 @@ namespace QuanChat
             MessageLayout.Refresh();
 
             if (log)
-                Plugin.Log.LogInfo($"Chat window laid out: window {size.x:0} x {size.y:0}, text area " +
-                                   $"{text.rect.width:0} x {text.rect.height:0}, input {inputHeight:0} high, " +
-                                   $"root {(root != null ? "found" : "MISSING")}, background " +
-                                   $"{(bkg != null ? "made even" : "MISSING")}.");
+                Plugin.Log.LogInfo($"Chat window laid out on a {Screen.width} x {Screen.height} screen: box " +
+                                   $"{size.x:0} x {size.y:0}, {edge:0} in from the bottom-right corner, text area " +
+                                   $"{chat.m_output.rectTransform.rect.width:0} x " +
+                                   $"{chat.m_output.rectTransform.rect.height:0}, input {inputHeight:0} high, " +
+                                   $"root {(root != null ? "found" : "MISSING")}, screen canvas " +
+                                   $"{(screen != null ? $"{screen.rect.width:0} x {screen.rect.height:0}" : "MISSING")}, " +
+                                   $"background {(bkg != null ? "made even" : "MISSING")}.");
         }
 
         private static void Fill(RectTransform rect)

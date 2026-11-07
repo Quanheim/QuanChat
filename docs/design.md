@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 7, 9 and 10 passed on 0.1.0. 0.2.0 built 7 Nov with features 14 to 17: steps 16 to 20 to test (see Test results). Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 7, 9 and 10 passed on 0.1.0. 0.2.1 built 7 Nov with features 14 to 17 (0.2.0 filled the screen width): steps 16 to 20 to test (see Test results). Valheim 1.0.21.
 
 ## Purpose
 
@@ -129,7 +129,7 @@ a second player for the multi-player checks.
 | 17 | (0.2.0) Width and Height to 150, then 60 | The window grows left and up, then shrinks, staying anchored bottom right; the input box spans the width. |
 | 18 | (0.2.0) Fill the chat with messages | None spill above the window; the oldest drop off the top. Page Up still scrolls back. |
 | 19 | (0.2.0) Font size to 26, then 12 | Text and input box grow, then shrink; messages still fit. |
-| 20 | (0.2.0) Check the BepInEx log | One line: "Chat window laid out: ... root found, background made even." |
+| 20 | (0.2.1) Check the BepInEx log | One line: "Chat window laid out on a ... screen: box 500 x 400, 34 in from the bottom-right corner, ... root found, screen canvas ..., background made even." |
 
 ## Test results
 
@@ -148,3 +148,6 @@ a second player for the multi-player checks.
   after 30 s, comes back on a message and fades again; turning Space between messages off applies at once. But the
   gradient background doesn't suit Always show, and the window needs sizing, an even gap, messages kept inside it
   and a font size: features 14 to 17, built in 0.2.0.
+- **7 Nov 2026 (Quandru), 0.2.0:** the chat filled the whole width of the screen at the bottom left. Chat_box has
+  its own Canvas, which Unity stretches to the screen, so resizing it did nothing and its children filled the
+  screen. 0.2.1 places the inner `root` box instead, from the screen's bottom-right corner.
