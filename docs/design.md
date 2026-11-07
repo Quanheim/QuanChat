@@ -169,3 +169,4 @@ a second player for the multi-player checks.
 - **7 Nov 2026 (Quandru):** hanging indent works on a long message (wrapped line indented under the first). The
   message stopped at 127 characters: that's the chat input's `characterLimit` in the main scene (ChatInput, 127),
   client-side only; nothing in `Chat` or the routed RPC limits length.
+- **7 Nov 2026 (Quandru):** step 11 works: the chat hides in the Esc menu, with Ctrl+F3 and under the big map.
