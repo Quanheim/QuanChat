@@ -38,7 +38,7 @@ most about vanilla chat. No other chat mod is in our modpack, so QuanChat has th
 | 2 | One-off channel messages | `/say hello` sends that one message as local talk (15 m) and leaves your channel as it was. Likewise `/s hello`. |
 | 3 | Sticky channel switching | `/say` on its own, then Enter, makes local talk your channel for every later untagged message. `/s` on its own switches back to shout. WoW style. |
 | 4 | Channel indicator | The empty chat input shows your channel as placeholder text, e.g. "[Shout] …". To be judged in the test. |
-| 5 | Starting channel from the server | Every login starts you in the server's starting channel (shout by default). Your sticky choice isn't remembered between logins. |
+| 5 | Starting channel | Every login starts you in your *Starting channel* setting (Shout when the config file is first created; each player can change it). Your sticky choice during play isn't remembered between logins. |
 | 6 | Messages as typed | No forced capitals on shouts or lowercase on whispers, in the window or the floating text. |
 | 7 | Window visibility | A new message shows the window at full opacity. After *Seconds until idle* (30 s) it fades: **out entirely** by default, or with *Always show* on, **to the idle opacity** (50 %) and stays there until the next message. |
 | 8 | Hidden when it should be | The window hides with the HUD (Ctrl+F3), during the intro and in menus, and sits **under the big map**, not over it. |
@@ -64,11 +64,13 @@ most about vanilla chat. No other chat mod is in our modpack, so QuanChat has th
 
 ## Settings
 
-Per the template convention (`docs/DEVELOPMENT.md`, "Config files"). Only one setting affects other players.
+Per the template convention (`docs/DEVELOPMENT.md`, "Config files"). **All personal** (Quandru, 7 Nov 2026): nothing
+in v1 affects other players, so nothing is synced from the server. Talk distance (later) would be the first enforced
+setting.
 
 | Section | Setting | Default | Enforced / Personal | Description |
 |---|---|---|---|---|
-| `0 - General` | Starting channel | Shout | Enforced | The channel every player starts in at login. Shout reaches everyone; Say reaches players within 15 m. Synced from the server; admins only. |
+| `0 - General (personal)` | Starting channel | Shout | Personal | The channel you start in each time you log in. Shout reaches everyone; Say reaches players within 15 m. Switch during play with `/s` or `/say` on their own. |
 | `1 - Window (personal)` | Always show | Off | Personal | Off: the chat window fades out entirely once it's idle. On: it stays on screen at the idle opacity. |
 | | Seconds until idle | 30 | Personal | How long the window stays at full opacity after the newest message (5–300). |
 | | Idle opacity | 50 % | Personal | How visible the window stays once idle, when Always show is on (10–100 %). |
@@ -79,8 +81,8 @@ Per the template convention (`docs/DEVELOPMENT.md`, "Config files"). Only one se
 
 ## How it would work (outline)
 
-- **Client-side, nearly all of it:** channels, formatting, the window, scrolling and click-through patch `Chat` and
-  `Terminal` on each player's PC. The server only syncs the starting channel.
+- **Client-side, all of v1:** channels, formatting, the window, scrolling and click-through patch `Chat` and
+  `Terminal` on each player's PC. The server runs no QuanChat code in v1.
 - **Channels:** our own state (current channel) decides the type for untagged input; `/say` and `/s` are replaced
   so that with no text they switch channel instead of sending an empty message.
 - **No forced case:** replace the case changes in `Terminal.AddString(title, text, type)` and
@@ -90,7 +92,9 @@ Per the template convention (`docs/DEVELOPMENT.md`, "Config files"). Only one se
 - **Under the map:** to find out in the POC how the chat and large-map canvases are ordered; if they can't be
   reordered, hide the window while the large map is open (same result, since the map is full-screen), except while
   typing.
-- **Required on every client and the server**, version-checked like the rest of the modpack.
+- **Still required on every client and the server**, version-checked like the rest of the modpack, even though v1
+  needs nothing from the server: it keeps everyone on the same version, and private messages and talk distance will
+  need it.
 
 ## Test script (POC)
 
@@ -113,7 +117,7 @@ a second player for the multi-player checks.
 | 12 | Page Up / Page Down without opening chat | The window scrolls back and forward; a new message jumps to the bottom. |
 | 13 | Click where the window overlaps something (e.g. with the inventory open) | The click goes through. |
 | 14 | Several messages from two players, some long enough to wrap | Each starts at the margin; wrapped lines are indented; a half-line gap between messages. Turn each setting off: back to vanilla layout. |
-| 15 | Change *Starting channel* to Say on the server, relog | You start in Say. A non-admin can't change it. |
+| 15 | Change your *Starting channel* to Say, relog | You start in Say. The second player still starts in Shout. |
 
 ## Open
 
