@@ -164,3 +164,6 @@ a second player for the multi-player checks.
   nothing spills above it.
 - **7 Nov 2026 (Quandru):** Width works too: the box grows to the left from the corner and the text rewraps to fit.
   Step 17 passed.
+- **7 Nov 2026 (Quandru):** hanging indent works on a long message (wrapped line indented under the first). The
+  message stopped at 127 characters: that's the chat input's `characterLimit` in the main scene (ChatInput, 127),
+  client-side only; nothing in `Chat` or the routed RPC limits length.
