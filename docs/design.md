@@ -154,3 +154,6 @@ a second player for the multi-player checks.
 - **7 Nov 2026 (Quandru), 0.2.1:** the box sat half off the bottom-right of the screen. The log said "screen canvas
   MISSING": `GetComponentInParent` skips the hidden window, so root kept its stored position. 0.2.2 anchors root
   to Chat_box's bottom-right corner instead (Chat_box covers the screen).
+- **7 Nov 2026 (Quandru), 0.2.2:** right size (500 x 400) and place on login, even background (step 16 passes),
+  input box along the bottom. Seen in the screenshot: a long line in the input runs to the box's left edge with
+  no padding.
