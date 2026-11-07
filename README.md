@@ -17,5 +17,6 @@ shout map pings.
 | [Settings.cs](Settings.cs) | The settings, all personal. |
 | [Channels.cs](Channels.cs) | Default and sticky channels, and the channel shown in the chat input. |
 | [ChatWindow.cs](ChatWindow.cs) | Window fade, idle opacity, hiding, click-through, scrolling without typing. |
-| [MessageLayout.cs](MessageLayout.cs) | Hanging indent and the gap between messages. |
+| [WindowLayout.cs](WindowLayout.cs) | Window size and position, even background, font size. |
+| [MessageLayout.cs](MessageLayout.cs) | Hanging indent, the gap between messages, fitting messages to the window. |
 | [Messages.cs](Messages.cs) | Messages as typed, jump to the newest line, no shout map pings. |

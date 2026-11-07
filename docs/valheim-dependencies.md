@@ -20,10 +20,10 @@ What the mod patches. A changed signature stops the patch applying; changed logi
 
 | Game code | Patch | What it does | If the game changes it |
 |---|---|---|---|
-| `Chat.Awake` | Postfix | Resets the channel to the Starting channel setting (Chat is created each login). | Channel no longer resets per login. |
+| `Chat.Awake` | Postfix (two) | Resets the channel to the Starting channel setting (Chat is created each login). Lays out the window: size, position, even background, font size; raises the message cap. | Channel no longer resets per login; window back to vanilla layout. |
 | `Chat.InputText` | Prefix | `/s` or `/say` alone switch channel; untagged text goes as `s <text>` in the shout channel. | Channels stop working, or messages go out as local talk. |
 | `Chat.Update` | Postfix | Takes over the window's visibility: fade, idle opacity, hiding, click-through, scrolling without typing, channel placeholder. | Window shows and hides as vanilla. |
-| `Terminal.UpdateChat` | Postfix | Adds the hanging-indent tags and paragraph spacing to the rebuilt output. | Layout back to vanilla. |
+| `Terminal.UpdateChat` | Postfix | Adds the hanging-indent tags and paragraph spacing to the rebuilt output, and drops the oldest lines that don't fit the text area. | Layout back to vanilla; messages spill above the window. |
 | `Terminal.AddString` | Transpiler + prefix (4-parameter overload: user, text, type, timestamp) | Replaces the shout `ToUpper` and whisper `ToLowerInvariant` calls; jumps the window to the newest line. | Warning in the log if the case calls aren't found; capitals return. |
 | `Chat.AddInworldText` | Transpiler | Same case fix for the floating text over the speaker. | Same warning; capitals return over heads. |
 | `Chat.GetShoutWorldTexts` | Prefix | Returns nothing when Hide shout map pings is on. | Shout pins return on the map. |
@@ -50,9 +50,10 @@ a change in behaviour isn't, so list the ones whose behaviour the mod depends on
 | Game code | Used for |
 |---|---|
 | `Chat.instance` | Refreshing the layout when a setting changes. |
-| `Chat.m_input` | The input field: its text (routing), whether it's showing (typing), its placeholder (channel indicator). |
-| `Terminal.m_chatWindow` | The window whose visibility and CanvasGroup alpha we set. |
-| `Terminal.m_output` | The window's TextMeshPro text: indent tags and `paragraphSpacing`. |
+| `Chat.m_input` | The input field: its text (routing), whether it's showing (typing), its placeholder (channel indicator), its rect (a strip along the bottom of the window) and `pointSize`. |
+| `Terminal.m_chatWindow` | The window whose visibility, CanvasGroup alpha, size and position we set. |
+| `Terminal.m_output` | The window's TextMeshPro text: indent tags, `paragraphSpacing`, font size, margin, rect, and `GetPreferredValues` to fit messages. |
+| `Terminal.m_maxVisibleBufferLength` | Raised from vanilla's 20 to 100; the window height decides how many show. |
 | `Terminal.TryRunCommand` | Sending an untagged message as a shout (`s <text>`). |
 | `Terminal.AddString` | The grey channel-switch notice (string overload). |
 | `Player.InIntro` | Hide the window during the intro. |
@@ -75,6 +76,7 @@ Things the game does that the mod counts on without calling them, e.g. "only the
 | `Chat.InputText` | Untagged input runs as `say <text>`, and `/`-prefixed input runs as a command without the slash. |
 | `Terminal.InitTerminal` | The `s` command shouts `FullLine.Substring(2)`, and `say` sends local talk; `/s` and `/say` with text keep working as vanilla. |
 | `Chat.Update` | Shows the window while `m_hideTimer < m_hideDelay` and resets `m_hideTimer` on focus; our postfix runs after and overrides the active state. Shows `m_input` while typing and hides it on send or close. |
+| `Chat.Awake` | Sets `m_maxVisibleBufferLength = 20` before our postfix raises it. |
 | `Chat.OnNewChatMessage` | Resets `m_hideTimer` on every message except pings, and replaces `<` and `>` in incoming text (so players can't inject the layout tags). |
 | `Terminal.UpdateInput` | Reads the scroll buttons only while the input is focused, so our unfocused scrolling never doubles up. |
 | `Terminal.UpdateChat` | Rebuilds `m_output.text` as one buffer entry per line, joined with newlines (the hanging indent relies on one paragraph per message). |
@@ -88,6 +90,8 @@ after each update.
 
 | Prefab or asset | Used for | Breaks if |
 |---|---|---|
-| Chat window (`Chat.m_chatWindow`) | Gets a `CanvasGroup` added for alpha and click-through. | Something else drives a CanvasGroup on it, or the window is restructured. |
+| Chat window (`Chat.m_chatWindow`, `Chat_box` in the main scene) | Gets a `CanvasGroup` added for alpha and click-through. Its vanilla size (500 x 400) and bottom gap (67) are read at login as the base for Width, Height and the new gap; anchors, pivot, position and size are then set. | Something else drives a CanvasGroup on it, or the window is restructured. |
+| Chat window children `root` and `root/bkg` (an `Image`) | `root` is stretched to fill the window and gets a `RectMask2D`; `bkg` is stretched and its gradient sprite cleared, keeping its colour. | Renamed or moved: the log line says `MISSING` and the background keeps its gradient. |
+| Chat output and input rects (`m_output`, `m_input`) | Set explicitly: input a strip along the bottom, its height vanilla's (35.5) scaled with font size; output fills the space above, 6 units in from the edges, margin cleared. Vanilla's stored child positions don't match what's drawn, so none are kept. | The window is rebuilt differently: check sizes in game. |
 | Chat input placeholder (`m_input.placeholder`, a TextMeshPro text) | Shows `[Shout]` / `[Say]` before vanilla's placeholder text. | The placeholder stops being TextMeshPro text: the indicator silently stops. |
 | Key bindings `ScrollChatUp`, `ScrollChatDown` (Page Up, Page Down) | Scrolling without typing. | Renamed in `ZInput`. |

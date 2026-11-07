@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 7 and 9 passed (see Test results). Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 7, 9 and 10 passed on 0.1.0. 0.2.0 built 7 Nov with features 14 to 17: steps 16 to 20 to test (see Test results). Valheim 1.0.21.
 
 ## Purpose
 
@@ -47,6 +47,10 @@ most about vanilla chat. No other chat mod is in our modpack, so QuanChat has th
 | 11 | Hide shout map pings | Shouts don't flash a pin on your map. The floating text over a nearby speaker stays. Personal, on by default. |
 | 12 | Hanging indent | The sender's name starts at the margin and the message, wrapped lines included, is indented after it, so each new message visibly starts at the margin. TextMeshPro `<indent>`/`<line-indent>` tags. |
 | 13 | Space between messages | A small gap, about half a line, between messages. TextMeshPro `<line-height>` or `<space>`-style tags. |
+| 14 | Even background | One shade of black over the whole window instead of vanilla's gradient, so it reads the same at idle opacity. Added after test step 10 (Quandru, 7 Nov). |
+| 15 | Window size and position | *Width* and *Height* settings (percent of vanilla's 500 x 400), anchored bottom right. The gap below is half vanilla's, with the same gap on the right. Added 7 Nov. |
+| 16 | Messages fit the window | Only as many messages as fit the window show; the oldest drop off the top instead of spilling above it. A taller window shows more (up to 100). Added 7 Nov. |
+| 17 | Font size | *Font size* setting in points (vanilla 18); the input box grows with it. Added 7 Nov. |
 
 ## Later (agreed 7 Nov 2026)
 
@@ -75,9 +79,12 @@ setting.
 | | Seconds until idle | 30 | Personal | How long the window stays at full opacity after the newest message (5–300). |
 | | Idle opacity | 50 % | Personal | How visible the window stays once idle, when Always show is on (10–100 %). |
 | | Click-through | On | Personal | The chat window ignores mouse clicks while you aren't typing. |
+| | Width | 100 % | Personal | Width of the window, in percent of the game's own (50–300). |
+| | Height | 100 % | Personal | Height of the window, in percent of the game's own (50–300). Shows as many messages as fit. |
 | `2 - Messages (personal)` | Hanging indent | On | Personal | Indent each message after the sender's name, so new messages start at the margin. |
 | | Space between messages | On | Personal | A small gap between messages. |
 | | Hide shout map pings | On | Personal | Shouts don't flash a pin on your map. |
+| | Font size | 18 | Personal | Size of the chat text in points (10–40). The input box grows with it. |
 
 ## How it would work (outline)
 
@@ -118,6 +125,11 @@ a second player for the multi-player checks.
 | 13 | Click where the window overlaps something (e.g. with the inventory open) | The click goes through. |
 | 14 | Several messages from two players, some long enough to wrap | Each starts at the margin; wrapped lines are indented; a half-line gap between messages. Turn each setting off: back to vanilla layout. |
 | 15 | Change your *Starting channel* to Say, relog | You start in Say. The second player still starts in Shout. |
+| 16 | (0.2.0) Always show on, wait until idle | The background is one even shade, no gradient. The gap below the window is half what it was, with the same gap on the right. |
+| 17 | (0.2.0) Width and Height to 150, then 60 | The window grows left and up, then shrinks, staying anchored bottom right; the input box spans the width. |
+| 18 | (0.2.0) Fill the chat with messages | None spill above the window; the oldest drop off the top. Page Up still scrolls back. |
+| 19 | (0.2.0) Font size to 26, then 12 | Text and input box grow, then shrink; messages still fit. |
+| 20 | (0.2.0) Check the BepInEx log | One line: "Chat window laid out: ... root found, background made even." |
 
 ## Test results
 
@@ -132,3 +144,7 @@ a second player for the multi-player checks.
   Shout.
 - **7 Nov 2026 (Quandru):** step 7 works: `small letters`, `Mixed Case Throughout` and `I AM FEELING SHOUTY`
   shown as typed in the window and over the speaker. Step 9 works: the window fades out completely.
+- **7 Nov 2026 (Quandru):** step 10 works: with Always show on the window comes in already showing, fades to idle
+  after 30 s, comes back on a message and fades again; turning Space between messages off applies at once. But the
+  gradient background doesn't suit Always show, and the window needs sizing, an even gap, messages kept inside it
+  and a font size: features 14 to 17, built in 0.2.0.

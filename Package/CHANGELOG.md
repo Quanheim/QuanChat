@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0 - 2026-11-07
+
+- The chat window's background is one even shade instead of a gradient, so it reads the same at idle opacity.
+- New *Width* and *Height* settings (percent of the game's size); the window stays anchored at the bottom right,
+  now with an even gap below and to the right.
+- Messages fit the window: the oldest drop off the top instead of spilling above it. A taller window shows more.
+- New *Font size* setting; the input box grows with it.
+
 ## 0.1.0 - 2026-11-07
 
 - Proof of concept, for testing on the Quanheim server.

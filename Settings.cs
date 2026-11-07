@@ -17,10 +17,13 @@ namespace QuanChat
         internal static ConfigEntry<int> SecondsUntilIdle;
         internal static ConfigEntry<int> IdleOpacity;
         internal static ConfigEntry<bool> ClickThrough;
+        internal static ConfigEntry<int> Width;
+        internal static ConfigEntry<int> Height;
 
         internal static ConfigEntry<bool> HangingIndent;
         internal static ConfigEntry<bool> SpaceBetweenMessages;
         internal static ConfigEntry<bool> HideShoutMapPings;
+        internal static ConfigEntry<int> FontSize;
 
         internal static void Bind(ConfigFile config)
         {
@@ -42,6 +45,12 @@ namespace QuanChat
             ClickThrough = config.Bind(window, "Click-through", true,
                 "The chat window ignores mouse clicks while you aren't typing, so it never gets in the way of what's " +
                 "behind it. Personal.");
+            Width = config.Bind(window, "Width", 100, new ConfigDescription(
+                "Width of the chat window, in percent of the game's own. It stays anchored at the bottom right. " +
+                "Personal.", new AcceptableValueRange<int>(50, 300)));
+            Height = config.Bind(window, "Height", 100, new ConfigDescription(
+                "Height of the chat window, in percent of the game's own. It grows upwards, and shows as many " +
+                "messages as fit. Personal.", new AcceptableValueRange<int>(50, 300)));
 
             const string messages = "2 - Messages (personal)";
             HangingIndent = config.Bind(messages, "Hanging indent", true,
@@ -51,9 +60,15 @@ namespace QuanChat
                 "Leave a small gap, about half a line, between messages. Personal.");
             HideShoutMapPings = config.Bind(messages, "Hide shout map pings", true,
                 "Shouts don't flash a pin on your map. The text over a nearby speaker's head still shows. Personal.");
+            FontSize = config.Bind(messages, "Font size", 18, new ConfigDescription(
+                "Size of the chat text, in points (the game's own is 18). The input box grows with it. Personal.",
+                new AcceptableValueRange<int>(10, 40)));
 
             HangingIndent.SettingChanged += (_, __) => MessageLayout.Refresh();
             SpaceBetweenMessages.SettingChanged += (_, __) => MessageLayout.Refresh();
+            Width.SettingChanged += (_, __) => WindowLayout.Refresh();
+            Height.SettingChanged += (_, __) => WindowLayout.Refresh();
+            FontSize.SettingChanged += (_, __) => WindowLayout.Refresh();
         }
     }
 }

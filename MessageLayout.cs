@@ -1,11 +1,13 @@
 using System.Reflection;
 using HarmonyLib;
+using TMPro;
+using UnityEngine;
 
 namespace QuanChat
 {
-    // Hanging indent and the gap between messages. Terminal.UpdateChat rebuilds the chat window's text from the
-    // buffer, one message per line; this adds TextMeshPro layout on top of that, so the buffer itself is untouched
-    // and changing a setting re-lays out the history too.
+    // Hanging indent, the gap between messages, and fitting the messages to the window. Terminal.UpdateChat
+    // rebuilds the chat window's text from the buffer, one message per line; this adds TextMeshPro layout on top
+    // of that, so the buffer itself is untouched and changing a setting re-lays out the history too.
     [HarmonyPatch(typeof(Terminal), "UpdateChat")]
     internal static class MessageLayout
     {
@@ -23,14 +25,36 @@ namespace QuanChat
         {
             if (!(__instance is Chat) || __instance.m_output == null)
                 return;
+            TextMeshProUGUI output = __instance.m_output;
 
             if (_vanillaParagraphSpacing == null)
-                _vanillaParagraphSpacing = __instance.m_output.paragraphSpacing;
-            __instance.m_output.paragraphSpacing =
-                Settings.SpaceBetweenMessages.Value ? MessageGap : _vanillaParagraphSpacing.Value;
+                _vanillaParagraphSpacing = output.paragraphSpacing;
+            output.paragraphSpacing = Settings.SpaceBetweenMessages.Value ? MessageGap : _vanillaParagraphSpacing.Value;
 
-            if (Settings.HangingIndent.Value)
-                __instance.m_output.text = HangingIndentTags + __instance.m_output.text;
+            string prefix = Settings.HangingIndent.Value ? HangingIndentTags : "";
+            string[] lines = output.text.TrimEnd('\n').Split('\n');
+            output.text = prefix + FitToWindow(output, prefix, lines);
+        }
+
+        // Drops the oldest messages until the rest fit the text area, so nothing spills above the window. The
+        // newest message always shows. Binary search: a handful of layouts per redraw, however long the history.
+        private static string FitToWindow(TextMeshProUGUI output, string prefix, string[] lines)
+        {
+            Rect area = output.rectTransform.rect;
+            if (area.width <= 0f || area.height <= 0f)
+                return string.Join("\n", lines);
+
+            int first = 0, last = lines.Length - 1;
+            while (first < last)
+            {
+                int mid = (first + last) / 2;
+                string candidate = prefix + string.Join("\n", lines, mid, lines.Length - mid);
+                if (output.GetPreferredValues(candidate, area.width, 0f).y <= area.height)
+                    last = mid;
+                else
+                    first = mid + 1;
+            }
+            return string.Join("\n", lines, first, lines.Length - first);
         }
 
         internal static void Refresh()
