@@ -160,3 +160,5 @@ a second player for the multi-player checks.
   0.2.3 keeps the chat up while the Configuration Manager window is open, and pads the typed text.
 - **7 Nov 2026 (Quandru), 0.2.2:** Height works: the box grows upwards from the corner. Width not yet tried (it
   sorts last in its section, below Seconds until idle).
+- **7 Nov 2026 (Quandru):** step 18 works: with the window full, the oldest messages drop off the top of the box and
+  nothing spills above it.
