@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 and 3 passed (see Test results). Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 4 passed (see Test results). Valheim 1.0.21.
 
 ## Purpose
 
@@ -124,3 +124,5 @@ a second player for the multi-player checks.
 - **7 Nov 2026 (Quandru):** step 2, the placeholder is clear and readable, so it stays as the channel indicator.
   Step 3 works. Screenshots also showed the hanging indent on wrapped lines, the gap between messages, and the
   join shout "I have arrived!" in normal case.
+- **7 Nov 2026 (Quandru):** step 4 works: "[Say] …" placeholder, the grey channel notice, and `one`/`two` as
+  local talk (white, floating text over the speaker).
