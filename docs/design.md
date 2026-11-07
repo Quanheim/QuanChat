@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 5 passed (see Test results). Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 6 passed (see Test results). Valheim 1.0.21.
 
 ## Purpose
 
@@ -128,3 +128,5 @@ a second player for the multi-player checks.
   local talk (white, floating text over the speaker).
 - **7 Nov 2026 (Quandru):** step 5 works: back to "[Shout] …", and `three` is a shout. Its floating text over the
   speaker is in normal case too (part of step 7).
+- **7 Nov 2026 (Quandru):** step 6 works: switched to Say and sent `test before logout`, relogged, started in
+  Shout.
