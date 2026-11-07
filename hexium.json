@@ -13,6 +13,6 @@
   "namespace": "Quandru",
   "name": "QuanChat",
   "community": "valheim",
-  "installLocation": "undefined",
-  "categories": ["undefined"]
+  "installLocation": "both",
+  "categories": ["User Interface", "Quality of Life", "Open Source", "Valheim 1.0"]
 }
