@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. 0.2.7, 8 Nov: every solo test step passes; steps 1, 8, 15b and 21b need a second player. POC 0.1.0 in test: steps 2 to 7, 9 and 10 passed on 0.1.0. 0.2.2 built 7 Nov with features 14 to 17 (0.2.0 filled the screen width, 0.2.1 sat half off-screen): steps 16 to 20 to test (see Test results). Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. 0.2.7, 8 Nov: every solo test step passes (see Test results); steps 1, 8, 15b and 21b need a second player. Valheim 1.0.21.
 
 ## Purpose
 
