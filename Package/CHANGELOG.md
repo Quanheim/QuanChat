@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.6 - 2026-11-08
+
+- New defaults: *Always show* on, *Idle opacity* 36, *Width* 130, *Height* 115, *Space between messages* off.
+  They apply to new config files; an existing one keeps its values (use each setting's Reset to take the default).
+
 ## 0.2.5 - 2026-11-08
 
 - Page Up and Page Down scroll 3 messages at a time, typing or not (the game: 1, and only while typing).

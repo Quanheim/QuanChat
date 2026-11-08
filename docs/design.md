@@ -40,13 +40,13 @@ most about vanilla chat. No other chat mod is in our modpack, so QuanChat has th
 | 4 | Channel indicator | The empty chat input shows your channel as placeholder text, e.g. "[Shout] …". Judged clear and readable in the test (7 Nov). |
 | 5 | Starting channel | Every login starts you in your *Starting channel* setting (Shout when the config file is first created; each player can change it). Your sticky choice during play isn't remembered between logins. |
 | 6 | Messages as typed | No forced capitals on shouts or lowercase on whispers, in the window or the floating text. |
-| 7 | Window visibility | A new message shows the window at full opacity. After *Seconds until idle* (30 s) it fades: **out entirely** by default, or with *Always show* on, **to the idle opacity** (50 %) and stays there until the next message. |
+| 7 | Window visibility | A new message shows the window at full opacity. After *Seconds until idle* (30 s) it fades **to the idle opacity** (36 %) and stays there until the next message, with *Always show* on (the default from 0.2.6), or **out entirely** with it off. |
 | 8 | Hidden when it should be | The window hides with the HUD (Ctrl+F3), during the intro and in menus, and sits **under the big map**, not over it. |
 | 9 | Scroll without typing | Page Up / Page Down scroll the window whenever it's showing, not only while typing, 3 messages per press (Quandru, 8 Nov). A new message jumps back to the bottom. |
 | 10 | Click-through | The window doesn't catch mouse clicks while you're not typing in it. |
 | 11 | Hide shout map pings | Shouts don't flash a pin on your map. The floating text over a nearby speaker stays. Personal, on by default. |
 | 12 | Hanging indent | The sender's name starts at the margin and the message, wrapped lines included, is indented after it, so each new message visibly starts at the margin. TextMeshPro `<indent>`/`<line-indent>` tags. |
-| 13 | Space between messages | A small gap, about half a line, between messages. TextMeshPro `<line-height>` or `<space>`-style tags. |
+| 13 | Space between messages | A small gap, about half a line, between messages; off by default from 0.2.6. TextMeshPro `<line-height>` or `<space>`-style tags. |
 | 14 | Even background | One shade of black over the whole window instead of vanilla's gradient, so it reads the same at idle opacity. Added after test step 10 (Quandru, 7 Nov). |
 | 15 | Window size and position | *Width* and *Height* settings (percent of vanilla's 500 x 400), anchored bottom right. The gap below is half vanilla's, with the same gap on the right. Added 7 Nov. |
 | 16 | Messages fit the window | Only as many messages as fit the window show; the oldest drop off the top instead of spilling above it. A taller window shows more (up to 100). Added 7 Nov. |
@@ -76,14 +76,14 @@ setting.
 | Section | Setting | Default | Enforced / Personal | Description |
 |---|---|---|---|---|
 | `0 - General (personal)` | Starting channel | Shout | Personal | The channel you start in each time you log in. Shout reaches everyone; Say reaches players within 15 m. Switch during play with `/s` or `/say` on their own. |
-| `1 - Window (personal)` | Always show | Off | Personal | Off: the chat window fades out entirely once it's idle. On: it stays on screen at the idle opacity. |
+| `1 - Window (personal)` | Always show | On | Personal | Off: the chat window fades out entirely once it's idle. On: it stays on screen at the idle opacity. |
 | | Seconds until idle | 30 | Personal | How long the window stays at full opacity after the newest message (5–300). |
-| | Idle opacity | 50 % | Personal | How visible the window stays once idle, when Always show is on (10–100 %). |
+| | Idle opacity | 36 % | Personal | How visible the window stays once idle, when Always show is on (10–100 %). |
 | | Click-through | On | Personal | The chat window ignores mouse clicks while you aren't typing. |
-| | Width | 100 % | Personal | Width of the window, in percent of the game's own (50–300). |
-| | Height | 100 % | Personal | Height of the window, in percent of the game's own (50–300). Shows as many messages as fit. |
+| | Width | 130 % | Personal | Width of the window, in percent of the game's own (50–300). |
+| | Height | 115 % | Personal | Height of the window, in percent of the game's own (50–300). Shows as many messages as fit. |
 | `2 - Messages (personal)` | Hanging indent | On | Personal | Indent each message after the sender's name, so new messages start at the margin. |
-| | Space between messages | On | Personal | A small gap between messages. |
+| | Space between messages | Off | Personal | A small gap between messages. |
 | | Hide shout map pings | On | Personal | Shouts don't flash a pin on your map. |
 | | Font size | 18 | Personal | Size of the chat text in points (10–40). The input box grows with it. |
 
@@ -178,3 +178,6 @@ a second player for the multi-player checks.
   holds, and messages still fit the box.
 - **8 Nov 2026 (Quandru), 0.2.5:** the chat stays visible while the Configuration Manager (F1) window is open.
 - **8 Nov 2026 (Quandru), 0.2.5:** Page Up / Page Down move 3 messages per press.
+- **8 Nov 2026 (Quandru):** step 15, first half: Starting channel Say, relog, starts in Say. Defaults set from what
+  Quandru settled on in testing: Always show on, Idle opacity 36, Width 130, Height 115, Space between messages
+  off (others unchanged). 0.2.6.
