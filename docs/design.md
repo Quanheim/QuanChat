@@ -7,6 +7,12 @@ Status: v1 agreed with Quandru, 7 Nov 2026. **Released as 1.0.0, 8 Nov 2026**, a
 A chat mod for the Quanheim server with a feature set close to **BetterChat 1.6.4** (Crystal), fixing what bugs us
 most about vanilla chat. No other chat mod is in our modpack, so QuanChat has the chat to itself.
 
+## Credit
+
+**Decided (Quandru, 8 Nov 2026): no credit needed.** BetterChat was the inspiration for the feature set only:
+similar ideas, all our own code, nothing taken from it. If that changes (code, assets or a distinctive design
+reused), revisit this and credit Crystal.
+
 ## What vanilla does today (from `Chat` and `Terminal`)
 
 - **Three message types:** normal talk (`/say`, reaches players within 15 m), shout (`/s`, reaches everyone) and
