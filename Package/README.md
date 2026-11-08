@@ -18,7 +18,7 @@ connect. On a dedicated server it does nothing except keep everyone's version in
   *Always show* on, it fades to half opacity and stays on screen. It hides with the HUD (Ctrl+F3), in the menu and
   under the big map, and lets mouse clicks through while you aren't typing. One even background, sized to taste
   with *Width* and *Height*, and messages never spill above it.
-- **Scroll without typing.** Page Up and Page Down scroll back through chat any time the window can show. A new
+- **Scroll without typing.** Page Up and Page Down scroll back through chat, 3 messages at a time, any time the window can show. A new
   message jumps back to the newest line.
 - **Longer messages.** Up to 200 characters instead of the game's 127.
 - **Your font size.** Set the chat text size you like.

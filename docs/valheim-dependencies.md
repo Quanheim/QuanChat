@@ -22,7 +22,7 @@ What the mod patches. A changed signature stops the patch applying; changed logi
 |---|---|---|---|
 | `Chat.Awake` | Postfix (two) | Resets the channel to the Starting channel setting (Chat is created each login). Lays out the window: size, position, even background, font size; raises the message cap. | Channel no longer resets per login; window back to vanilla layout. |
 | `Chat.InputText` | Prefix | `/s` or `/say` alone switch channel; untagged text goes as `s <text>` in the shout channel. | Channels stop working, or messages go out as local talk. |
-| `Chat.Update` | Postfix | Takes over the window's visibility: fade, idle opacity, hiding, click-through, scrolling without typing, channel placeholder. | Window shows and hides as vanilla. |
+| `Chat.Update` | Prefix + postfix | Takes over the window's visibility: fade, idle opacity, hiding, click-through, scrolling 3 messages per press (the prefix records the scroll position before vanilla's 1-message scroll while typing), channel placeholder. | Window shows and hides as vanilla. |
 | `Terminal.UpdateChat` | Postfix | Adds the hanging-indent tags and paragraph spacing to the rebuilt output, and drops the oldest lines that don't fit the text area. | Layout back to vanilla; messages spill above the window. |
 | `Terminal.AddString` | Transpiler + prefix (4-parameter overload: user, text, type, timestamp) | Replaces the shout `ToUpper` and whisper `ToLowerInvariant` calls; jumps the window to the newest line. | Warning in the log if the case calls aren't found; capitals return. |
 | `Chat.AddInworldText` | Transpiler | Same case fix for the floating text over the speaker. | Same warning; capitals return over heads. |
@@ -78,7 +78,7 @@ Things the game does that the mod counts on without calling them, e.g. "only the
 | `Chat.Update` | Shows the window while `m_hideTimer < m_hideDelay` and resets `m_hideTimer` on focus; our postfix runs after and overrides the active state. Shows `m_input` while typing and hides it on send or close. |
 | `Chat.Awake` | Sets `m_maxVisibleBufferLength = 20` before our postfix raises it. |
 | `Chat.OnNewChatMessage` | Resets `m_hideTimer` on every message except pings, and replaces `<` and `>` in incoming text (so players can't inject the layout tags). |
-| `Terminal.UpdateInput` | Reads the scroll buttons only while the input is focused, so our unfocused scrolling never doubles up. |
+| `Terminal.UpdateInput` | Reads the scroll buttons only while the input is focused, 1 message per press, inside `Chat.Update`; our postfix sets the position from the value before it, so the two never add up. |
 | `Terminal.UpdateChat` | Rebuilds `m_output.text` as one buffer entry per line, joined with newlines (the hanging indent relies on one paragraph per message). |
 | `Minimap.UpdateShoutPins` | Clears its list, then fills it from `Chat.GetShoutWorldTexts`; an empty list removes the pins. |
 

@@ -42,7 +42,7 @@ most about vanilla chat. No other chat mod is in our modpack, so QuanChat has th
 | 6 | Messages as typed | No forced capitals on shouts or lowercase on whispers, in the window or the floating text. |
 | 7 | Window visibility | A new message shows the window at full opacity. After *Seconds until idle* (30 s) it fades: **out entirely** by default, or with *Always show* on, **to the idle opacity** (50 %) and stays there until the next message. |
 | 8 | Hidden when it should be | The window hides with the HUD (Ctrl+F3), during the intro and in menus, and sits **under the big map**, not over it. |
-| 9 | Scroll without typing | Page Up / Page Down scroll the window whenever it's showing, not only while typing. A new message jumps back to the bottom. |
+| 9 | Scroll without typing | Page Up / Page Down scroll the window whenever it's showing, not only while typing, 3 messages per press (Quandru, 8 Nov). A new message jumps back to the bottom. |
 | 10 | Click-through | The window doesn't catch mouse clicks while you're not typing in it. |
 | 11 | Hide shout map pings | Shouts don't flash a pin on your map. The floating text over a nearby speaker stays. Personal, on by default. |
 | 12 | Hanging indent | The sender's name starts at the margin and the message, wrapped lines included, is indented after it, so each new message visibly starts at the margin. TextMeshPro `<indent>`/`<line-indent>` tags. |
@@ -170,3 +170,5 @@ a second player for the multi-player checks.
   message stopped at 127 characters: that's the chat input's `characterLimit` in the main scene (ChatInput, 127),
   client-side only; nothing in `Chat` or the routed RPC limits length.
 - **7 Nov 2026 (Quandru):** step 11 works: the chat hides in the Esc menu, with Ctrl+F3 and under the big map.
+- **8 Nov 2026 (Quandru):** step 12 works: Page Up / Page Down scroll without typing. Asked for 3 messages per
+  press instead of 1: 0.2.5, typing or not.

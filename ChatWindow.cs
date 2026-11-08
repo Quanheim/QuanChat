@@ -23,7 +23,13 @@ namespace QuanChat
             AccessTools.FieldRefAccess<Terminal, List<string>>("m_chatBuffer");
         private static readonly MethodInfo UpdateChat = AccessTools.Method(typeof(Terminal), "UpdateChat");
 
-        private static void Postfix(Chat __instance)
+        // Messages moved per Page Up / Page Down press (vanilla: 1, and only while typing).
+        private const int ScrollStep = 3;
+
+        // The scroll position before vanilla's Update, which scrolls by 1 while typing.
+        private static void Prefix(Chat __instance, out int __state) => __state = ScrollHeight(__instance);
+
+        private static void Postfix(Chat __instance, int __state)
         {
             RectTransform window = __instance.m_chatWindow;
             if (window == null)
@@ -36,8 +42,8 @@ namespace QuanChat
                 Channels.UpdatePlaceholder(__instance);
 
             bool hidden = IsHidden(typing);
-            if (!hidden && !typing)
-                ScrollWithoutTyping(__instance);
+            if (typing || !hidden)
+                Scroll(__instance, __state, typing);
 
             float alpha = typing ? 1f : IdleAlpha(HideTimer(__instance));
             bool show = !hidden && alpha > 0.001f;
@@ -99,10 +105,11 @@ namespace QuanChat
             return _displayingWindow != null && _displayingWindow.GetValue(_configurationManager) is bool open && open;
         }
 
-        // Vanilla only reads Page Up / Page Down while you're typing (Terminal.UpdateInput).
-        private static void ScrollWithoutTyping(Chat chat)
+        // Page Up / Page Down move ScrollStep messages, typing or not. Vanilla only reads them while you're typing
+        // (Terminal.UpdateInput, 1 message per press); from where the scroll stood before that, we set it ourselves.
+        private static void Scroll(Chat chat, int before, bool typing)
         {
-            if (Console.IsVisible() || TextInput.IsVisible() || Minimap.InTextInput())
+            if (!typing && (Console.IsVisible() || TextInput.IsVisible() || Minimap.InTextInput()))
                 return;
 
             int delta = 0;
@@ -115,7 +122,7 @@ namespace QuanChat
 
             ref int scroll = ref ScrollHeight(chat);
             int max = Mathf.Max(0, ChatBuffer(chat).Count - 5); // vanilla's limit
-            int next = Mathf.Clamp(scroll + delta, 0, max);
+            int next = Mathf.Clamp(before + delta * ScrollStep, 0, max);
             HideTimer(chat) = 0f; // scrolling brings the window back to full opacity
             if (next == scroll)
                 return;

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.5 - 2026-11-08
+
+- Page Up and Page Down scroll 3 messages at a time, typing or not (the game: 1, and only while typing).
+
 ## 0.2.4 - 2026-11-07
 
 - Messages can be up to 200 characters (the game stops at 127).
