@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. **Released as 1.0.0, 8 Nov 2026**, after every solo test step passed (see Test results); step 8 (shout map pings from a second player) is still to check on the server. Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. **Released as 1.0.0, 8 Nov 2026**, after every solo test step passed (see Test results); every step of the test script passed by 8 Nov 2026, including the multiplayer ones. Valheim 1.0.21.
 
 ## Purpose
 
@@ -198,3 +198,5 @@ a second player for the multi-player checks.
   still to check once it's on the server.
 - **8 Nov 2026 (Quandru):** steps 1, 15b and 21b work, seen in multiplayer play on the server: messages reach the
   other player as typed, they start in Shout, and several long messages were sent and received whole. Left: step 8.
+- **8 Nov 2026 (Quandru):** step 8 works: a second player's shout flashes no pin on the big map. Every step of
+  the original test script now passes.
