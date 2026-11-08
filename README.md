@@ -13,7 +13,7 @@ shout map pings.
 
 | File | What it does |
 |---|---|
-| [Plugin.cs](Plugin.cs) | Start-up: skips everything on a dedicated server, otherwise settings and Harmony. |
+| [Plugin.cs](Plugin.cs) | Start-up: settings (written on a dedicated server too, so Gale can exclude the file), then Harmony patches, skipped on a dedicated server. |
 | [Settings.cs](Settings.cs) | The settings, all personal. |
 | [Channels.cs](Channels.cs) | Default and sticky channels, and the channel shown in the chat input. |
 | [ChatWindow.cs](ChatWindow.cs) | Window fade, idle opacity, hiding, click-through, scrolling without typing. |

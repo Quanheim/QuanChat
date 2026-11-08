@@ -6,6 +6,10 @@ into capitals, and the chat window vanishes ten seconds after the last message. 
 **Install it on the server and on every client.** It's version-checked: players with a different version can't
 connect. On a dedicated server it does nothing except keep everyone's version in step.
 
+**Sharing your modpack as a Gale profile?** Every QuanChat setting is personal. In the profile you push, exclude
+`BepInEx/config/quandru.QuanChat.cfg` from the export (start the game or server once so the file exists). Otherwise
+each sync resets every player's chat settings.
+
 ## What it does
 
 - **Shout is the default.** Type a message and press Enter: everyone on the server sees it.

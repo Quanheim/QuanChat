@@ -24,18 +24,21 @@ namespace QuanChat
         {
             Log = Logger;
 
-            // A dedicated server has no chat window, so there's nothing for QuanChat to do there. Skip the patches
-            // and the config file: every setting is personal, and a server copy would only travel to players in a
-            // Gale profile sync.
+            // The config file is written on a dedicated server too, though nothing there reads it. Every setting is
+            // personal, so the server's copy must be excluded from the Gale profile's export; Gale can only exclude a
+            // file that exists, and without the exclusion each sync deletes every player's own copy.
+            Settings.Bind(Config);
+
+            // A dedicated server has no chat window, so there's nothing else for QuanChat to do there.
             if (IsDedicatedServer())
             {
                 Logger.LogInfo($"{PluginName} {PluginVersion} loaded on a dedicated server: its features are all " +
-                               "client-side, so they're disabled here and no config file is written. It's installed " +
-                               "on the server so every player's version matches.");
+                               "client-side, so they're disabled here. Its config file is written so it can be " +
+                               "excluded from the Gale profile's export. It's installed on the server so every " +
+                               "player's version matches.");
                 return;
             }
 
-            Settings.Bind(Config);
             new Harmony(PluginGuid).PatchAll(typeof(Plugin).Assembly);
             Logger.LogInfo($"{PluginName} {PluginVersion} loaded.");
         }

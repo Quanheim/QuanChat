@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 - 2026-11-08
+
+- The dedicated server now writes its own `quandru.QuanChat.cfg` (nothing there uses it). A server owner who shares
+  the modpack as a Gale profile can then exclude that file from the export, so players' own chat settings survive
+  each sync. Without the file there's nothing to exclude, and a sync deletes every player's copy.
+
 ## 1.0.0 - 2026-11-08
 
 First release. Everything from the 0.x test builds:

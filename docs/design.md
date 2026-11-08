@@ -73,6 +73,13 @@ Per the template convention (`docs/DEVELOPMENT.md`, "Config files"). **All perso
 in v1 affects other players, so nothing is synced from the server. Talk distance (later) would be the first enforced
 setting.
 
+**The server writes the config file anyway** (1.0.1, 8 Nov 2026). Gale's profile sync, checked in its source
+(`profile/import/mod.rs`, `profile/export/mod.rs`, 8 Nov 2026), deletes a player's config files that aren't in the
+pushed profile unless that player has "preserve extras" on. The only way to keep them is to exclude the file from the
+owner's export, and Gale only lists, and only keeps an exclusion for, files that exist in the owner's profile. 1.0.0
+skipped the config on a dedicated server, so there was nothing to exclude. So `quandru.QuanChat.cfg` must exist on
+the server and be excluded from the master profile's export.
+
 | Section | Setting | Default | Enforced / Personal | Description |
 |---|---|---|---|---|
 | `0 - General (personal)` | Starting channel | Shout | Personal | The channel you start in each time you log in. Shout reaches everyone; Say reaches players within 15 m. Switch during play with `/s` or `/say` on their own. |
