@@ -183,3 +183,5 @@ a second player for the multi-player checks.
   off (others unchanged). 0.2.6.
 - **8 Nov 2026 (Quandru):** `/shout` didn't switch to shout (vanilla has only `/s`). 0.2.7 adds `/shout`, alone
   and with text.
+- **8 Nov 2026 (Quandru):** step 21, own side: the message stops at exactly 200 characters, and the floating text
+  over the speaker is five lines, which looks fine. Still to check: the second player receives it whole.
