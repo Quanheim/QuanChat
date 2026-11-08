@@ -176,3 +176,4 @@ a second player for the multi-player checks.
   Step 14 done: turning Hanging indent off gives the vanilla layout.
 - **8 Nov 2026 (Quandru):** step 19 works at the extremes, Font size 40 and 10: text rewraps, the hanging indent
   holds, and messages still fit the box.
+- **8 Nov 2026 (Quandru), 0.2.5:** the chat stays visible while the Configuration Manager (F1) window is open.
