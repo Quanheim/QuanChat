@@ -172,3 +172,5 @@ a second player for the multi-player checks.
 - **7 Nov 2026 (Quandru):** step 11 works: the chat hides in the Esc menu, with Ctrl+F3 and under the big map.
 - **8 Nov 2026 (Quandru):** step 12 works: Page Up / Page Down scroll without typing. Asked for 3 messages per
   press instead of 1: 0.2.5, typing or not.
+- **8 Nov 2026 (Quandru):** step 13 works: with the inventory open, the craft button's hover shows through the chat.
+  Step 14 done: turning Hanging indent off gives the vanilla layout.
