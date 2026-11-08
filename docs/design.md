@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. POC 0.1.0 in test: steps 2 to 7, 9 and 10 passed on 0.1.0. 0.2.2 built 7 Nov with features 14 to 17 (0.2.0 filled the screen width, 0.2.1 sat half off-screen): steps 16 to 20 to test (see Test results). Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. 0.2.7, 8 Nov: every solo test step passes; steps 1, 8, 15b and 21b need a second player. POC 0.1.0 in test: steps 2 to 7, 9 and 10 passed on 0.1.0. 0.2.2 built 7 Nov with features 14 to 17 (0.2.0 filled the screen width, 0.2.1 sat half off-screen): steps 16 to 20 to test (see Test results). Valheim 1.0.21.
 
 ## Purpose
 
@@ -185,3 +185,5 @@ a second player for the multi-player checks.
   and with text.
 - **8 Nov 2026 (Quandru):** step 21, own side: the message stops at exactly 200 characters, and the floating text
   over the speaker runs to five lines. Still to check: the second player receives it whole.
+- **8 Nov 2026 (Quandru), 0.2.7:** step 22 works: `/shout` alone switches to Shout; `/shout hello` from Say sends
+  one shout and leaves the channel in Say. Left for a second player: steps 1, 8, 15b, 21b.
