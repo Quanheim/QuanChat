@@ -6,9 +6,16 @@ into capitals, and the chat window vanishes ten seconds after the last message. 
 **Install it on the server and on every client.** It's version-checked: players with a different version can't
 connect. On a dedicated server it does nothing except keep everyone's version in step.
 
-**Sharing your modpack as a Gale profile?** Every QuanChat setting is personal. In the profile you push, exclude
-`BepInEx/config/quandru.QuanChat.cfg` from the export (start the game or server once so the file exists). Otherwise
-each sync resets every player's chat settings.
+## Server owners: let players keep their own chat settings
+
+Every QuanChat setting is personal: window size, font, fading and the rest are up to each player. If you hand out
+your modpack's configs through a Gale profile (or any managed config sync), **untick `quandru.QuanChat.cfg` in the
+export** so players' own settings aren't overwritten or deleted on each sync.
+
+QuanChat makes that possible on a dedicated server: it writes `BepInEx/config/quandru.QuanChat.cfg` *before* it
+switches itself off there. The server never reads the file; it exists only so Gale can list it and you can exclude
+it. Start the server once with QuanChat installed, then in Gale open the profile's export file list, untick
+`quandru.QuanChat.cfg`, and push. Keep the file there: Gale forgets an exclusion if the file disappears.
 
 ## What it does
 
