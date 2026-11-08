@@ -1,6 +1,6 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. 0.2.7, 8 Nov: every solo test step passes (see Test results); steps 1, 8, 15b and 21b need a second player. Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. **Released as 1.0.0, 8 Nov 2026**, after every solo test step passed (see Test results); steps 1, 8, 15b and 21b, which need a second player, are still to check on the server. Valheim 1.0.21.
 
 ## Purpose
 
@@ -187,3 +187,5 @@ a second player for the multi-player checks.
   over the speaker runs to five lines. Still to check: the second player receives it whole.
 - **8 Nov 2026 (Quandru), 0.2.7:** step 22 works: `/shout` alone switches to Shout; `/shout hello` from Say sends
   one shout and leaves the channel in Say. Left for a second player: steps 1, 8, 15b, 21b.
+- **8 Nov 2026 (Quandru):** released 1.0.0 (0.2.7's code, plus a real icon) with the second-player steps
+  still to check once it's on the server.

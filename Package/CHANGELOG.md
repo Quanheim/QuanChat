@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0 - 2026-11-08
+
+First release. Everything from the 0.x test builds:
+
+- Shout is the default; `/say` and `/s` (or `/shout`) on their own switch channel, with text they send one message.
+- Messages appear as typed, up to 200 characters.
+- The chat window fades to an idle opacity or out after *Seconds until idle*, hides with the HUD, in the menu and
+  under the big map, and lets clicks through.
+- One even background, with *Width*, *Height* and *Font size* settings; messages fit the box.
+- Hanging indent, optional space between messages, Page Up / Page Down by 3 messages.
+- Shouts no longer flash a pin on the map.
+- A proper icon.
+
 ## 0.2.7 - 2026-11-08
 
 - `/shout` works like `/s`: on its own it switches you to shout; with text it sends one shout.
