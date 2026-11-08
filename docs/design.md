@@ -35,8 +35,8 @@ most about vanilla chat. No other chat mod is in our modpack, so QuanChat has th
 | # | Feature | What it means |
 |---|---|---|
 | 1 | Shout is the default channel | Typing a message and pressing Enter sends it to everyone on the server. |
-| 2 | One-off channel messages | `/say hello` sends that one message as local talk (15 m) and leaves your channel as it was. Likewise `/s hello`. |
-| 3 | Sticky channel switching | `/say` on its own, then Enter, makes local talk your channel for every later untagged message. `/s` on its own switches back to shout. WoW style. |
+| 2 | One-off channel messages | `/say hello` sends that one message as local talk (15 m) and leaves your channel as it was. Likewise `/s hello` or `/shout hello`. |
+| 3 | Sticky channel switching | `/say` on its own, then Enter, makes local talk your channel for every later untagged message. `/s` or `/shout` on its own switches back to shout. WoW style. |
 | 4 | Channel indicator | The empty chat input shows your channel as placeholder text, e.g. "[Shout] …". Judged clear and readable in the test (7 Nov). |
 | 5 | Starting channel | Every login starts you in your *Starting channel* setting (Shout when the config file is first created; each player can change it). Your sticky choice during play isn't remembered between logins. |
 | 6 | Messages as typed | No forced capitals on shouts or lowercase on whispers, in the window or the floating text. |
@@ -181,3 +181,5 @@ a second player for the multi-player checks.
 - **8 Nov 2026 (Quandru):** step 15, first half: Starting channel Say, relog, starts in Say. Defaults set from what
   Quandru settled on in testing: Always show on, Idle opacity 36, Width 130, Height 115, Space between messages
   off (others unchanged). 0.2.6.
+- **8 Nov 2026 (Quandru):** `/shout` didn't switch to shout (vanilla has only `/s`). 0.2.7 adds `/shout`, alone
+  and with text.

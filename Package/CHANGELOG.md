@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.7 - 2026-11-08
+
+- `/shout` works like `/s`: on its own it switches you to shout; with text it sends one shout.
+
 ## 0.2.6 - 2026-11-08
 
 - New defaults: *Always show* on, *Idle opacity* 36, *Width* 130, *Height* 115, *Space between messages* off.

@@ -27,8 +27,15 @@ namespace QuanChat
                 string text = __instance.m_input.text;
                 string trimmed = text.Trim();
 
-                if (trimmed.Equals("/s", StringComparison.OrdinalIgnoreCase))
+                if (trimmed.Equals("/s", StringComparison.OrdinalIgnoreCase) ||
+                    trimmed.Equals("/shout", StringComparison.OrdinalIgnoreCase))
                     return Switch(__instance, Channel.Shout);
+                // Vanilla has no "shout" command; "/shout hello" sends one shout, like "/s hello".
+                if (trimmed.StartsWith("/shout ", StringComparison.OrdinalIgnoreCase))
+                {
+                    __instance.TryRunCommand("s " + trimmed.Substring("/shout ".Length).TrimStart());
+                    return false;
+                }
                 if (trimmed.Equals("/say", StringComparison.OrdinalIgnoreCase))
                     return Switch(__instance, Channel.Say);
 
@@ -45,7 +52,7 @@ namespace QuanChat
                 Current = channel;
                 chat.AddString(channel == Channel.Shout
                     ? "<color=#B0B0B0>Channel: Shout. Your messages reach everyone. /say to talk nearby.</color>"
-                    : "<color=#B0B0B0>Channel: Say. Your messages reach players within 15 m. /s to shout.</color>");
+                    : "<color=#B0B0B0>Channel: Say. Your messages reach players within 15 m. /s or /shout to shout.</color>");
                 return false;
             }
         }

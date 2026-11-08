@@ -21,7 +21,7 @@ What the mod patches. A changed signature stops the patch applying; changed logi
 | Game code | Patch | What it does | If the game changes it |
 |---|---|---|---|
 | `Chat.Awake` | Postfix (two) | Resets the channel to the Starting channel setting (Chat is created each login). Lays out the window: size, position, even background, font size; raises the message cap. | Channel no longer resets per login; window back to vanilla layout. |
-| `Chat.InputText` | Prefix | `/s` or `/say` alone switch channel; untagged text goes as `s <text>` in the shout channel. | Channels stop working, or messages go out as local talk. |
+| `Chat.InputText` | Prefix | `/s`, `/shout` or `/say` alone switch channel; `/shout <text>` sends one shout (vanilla has no `shout` command); untagged text goes as `s <text>` in the shout channel. | Channels stop working, or messages go out as local talk. |
 | `Chat.Update` | Prefix + postfix | Takes over the window's visibility: fade, idle opacity, hiding, click-through, scrolling 3 messages per press (the prefix records the scroll position before vanilla's 1-message scroll while typing), channel placeholder. | Window shows and hides as vanilla. |
 | `Terminal.UpdateChat` | Postfix | Adds the hanging-indent tags and paragraph spacing to the rebuilt output, and drops the oldest lines that don't fit the text area. | Layout back to vanilla; messages spill above the window. |
 | `Terminal.AddString` | Transpiler + prefix (4-parameter overload: user, text, type, timestamp) | Replaces the shout `ToUpper` and whisper `ToLowerInvariant` calls; jumps the window to the newest line. | Warning in the log if the case calls aren't found; capitals return. |

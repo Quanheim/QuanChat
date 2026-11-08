@@ -10,7 +10,7 @@ connect. On a dedicated server it does nothing except keep everyone's version in
 
 - **Shout is the default.** Type a message and press Enter: everyone on the server sees it.
 - **Sticky channels.** `/say` on its own switches you to local talk (players within 15 m) for every message after
-  it; `/s` on its own switches back to shout. `/say hello` or `/s hello` sends just that one message and leaves your
+  it; `/s` or `/shout` on its own switches back to shout. `/say hello` or `/s hello` sends just that one message and leaves your
   channel alone. The chat input shows which channel you're in, e.g. `[Shout]`. You start each login in your
   *Starting channel* (Shout unless you change it).
 - **Messages appear as typed.** No forced capitals on shouts, no forced lowercase on whispers.
