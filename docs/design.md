@@ -174,3 +174,5 @@ a second player for the multi-player checks.
   press instead of 1: 0.2.5, typing or not.
 - **8 Nov 2026 (Quandru):** step 13 works: with the inventory open, the craft button's hover shows through the chat.
   Step 14 done: turning Hanging indent off gives the vanilla layout.
+- **8 Nov 2026 (Quandru):** step 19 works at the extremes, Font size 40 and 10: text rewraps, the hanging indent
+  holds, and messages still fit the box.
