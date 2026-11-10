@@ -146,6 +146,36 @@ a second player for the multi-player checks.
 | 20 | (0.2.1) Check the BepInEx log | One line: "Chat window laid out on a ... screen: box 500 x 400, 34 in from the bottom-right corner, ... root found, window <screen size in canvas units>, background made even." |
 | 21 | (0.2.4) Type a message past 127 characters | It keeps going to 200 and arrives whole for the second player. Judge the floating text over your head at that length. |
 
+## Test script: 1.0.1 and 1.0.99
+
+Written 10 Nov 2026. QuanChat's own table, never combined with another mod's; show it in Quandru's layout (workspace
+memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the original script above, all passed by 8 Nov.
+
+- **1.0.1** (released 10 Nov): on the live server, through the shared Gale profile.
+- **1.0.99** (branch `test/server-config`, never released): a coordinated test on a **local** dedicated server with
+  a client, from `dist\Quandru-QuanChat-1.0.99.zip` imported into a separate Gale test profile. Never put it in
+  the shared profile: its version sorts above any real 1.0.x. It tests a second config file,
+  `quandru.QuanChat.Server.cfg`, with one admin-only dummy setting synced by Jotunn, as groundwork for the first
+  enforced setting (talk distance).
+
+| Test | OK | # | Do | Expect / Result |
+|---|---|---|---|---|
+| | | | **Done** | |
+| ✅ | ✅ | 1–22 | Original test script (0.x to 1.0.0) | **Passed by 8 Nov 2026:** details in Test results |
+| | | | &nbsp; | |
+| | | | **Remaining** | |
+| ⬜ | ⬜ | 23 | Update QuanChat to 1.0.1 in the server's Gale profile, push, restart the server; everyone pulls | Server log: "QuanChat 1.0.1 loaded on a dedicated server … Its config file is written so it can be excluded from the Gale profile's export"; `quandru.QuanChat.cfg` now in the server profile's `BepInEx\config` |
+| ⬜ | ⬜ | 24 | In the server's (master) Gale profile, exclude `quandru.QuanChat.cfg` from the export, then push | Gale lists the file as excluded |
+| ⬜ | ⬜ | 25 | On your PC, change a QuanChat setting (e.g. Width), then pull the profile and restart the game | The setting is still your value, not reset |
+| ⬜ | ⬜ | 26 | **1.0.99, local:** import the 1.0.99 zip into a separate Gale test profile, start a local dedicated server from it | Server log "QuanChat test value (local file): default"; `quandru.QuanChat.Server.cfg` written next to `quandru.QuanChat.cfg` |
+| ⬜ | ⬜ | 27 | Stop the server, set "Test value" in its `quandru.QuanChat.Server.cfg` to `server`, start it, connect a client | Client log "QuanChat test value: server (after initial sync from the server)" |
+| ⬜ | ⬜ | 28 | On the client, open F1 and find "Test value" | Shown under "0 - Server (enforced)" with the server's value; locked for a non-admin |
+| ⬜ | ⬜ | 29 | As admin, change "Test value" in F1 | Every other connected client logs "QuanChat test value changed: <new value>" |
+| ⬜ | ⬜ | 30 | As a non-admin, edit your own `quandru.QuanChat.Server.cfg` to `mine` and reconnect | The server's value replaces it again on connect |
+| | | | &nbsp; | |
+| | | | **In progress** | |
+| | | | *(nothing under way)* | |
+
 ## Test results
 
 - **7 Nov 2026 (Quandru):** step 2, the placeholder is clear and readable, so it stays as the channel indicator.
