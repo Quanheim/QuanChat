@@ -165,6 +165,7 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 | ✅ | ✅ | 23 | Update QuanChat to 1.0.1 in the server's Gale profile, push, restart the server; everyone pulls | **Passed:** 1.0.1 ran on the server for several days; `quandru.QuanChat.cfg` is in the server profile (listed in Gale's synced files) |
 | ✅ | ✅ | 24 | In the server's (master) Gale profile, exclude `quandru.QuanChat.cfg` from the export, then push | **Passed:** unticked in the master profile's "Manage synced files" (done when 1.0.1 went on) |
 | ✅ | ✅ | 25 | On your PC, change a QuanChat setting (e.g. Width), then pull the profile and restart the game | **Passed (Valyyn's PC):** his own values (Always show off, Height 75, Idle opacity 10, Seconds until idle 15, Width 135) survived several pulls, with "Keep additional mods and config" off: the file was neither overwritten nor deleted |
+| ✅ | ✅ | 26 | **1.0.99 on the live server (15 Nov), imported locally on the server and each PC, not pushed:** server started | **Passed:** server log "QuanChat test value (local file): default" right after "Loading [QuanChat 1.0.99]", then the usual dedicated-server line; `quandru.QuanChat.Server.cfg` written (Gale: "Created by QuanChat v1.0.99", Test value `default`) |
 | | | | &nbsp; | |
 | | | | **Remaining** | |
 | ⬜ | ⬜ | 27 | Stop the server, set "Test value" in its `quandru.QuanChat.Server.cfg` to `server`, start it, connect a client | Client log "QuanChat test value: server (after initial sync from the server)" |
@@ -174,7 +175,7 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 | ⬜ | ⬜ | 31 | **After 26–30:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins` |
 | | | | &nbsp; | |
 | | | | **In progress** | |
-| ✅ | ⬜ | 26 | **1.0.99 on the live server (15 Nov), imported locally on the server and each PC, not pushed:** server started | `quandru.QuanChat.Server.cfg` written next to `quandru.QuanChat.cfg` (seen: Gale shows it, "Created by QuanChat v1.0.99", Test value `default`). Still to check: server log "QuanChat test value (local file): default" |
+| | | | *(nothing under way)* | |
 
 ## Test results
 
