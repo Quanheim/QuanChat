@@ -169,10 +169,12 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 | ✅ | ✅ | 27 | Stop the server, set "Test value" in its `quandru.QuanChat.Server.cfg` to `server`, start it, connect a client | **Passed:** server log "test value (local file): server"; Quandru's client "test value changed: server" then "test value: server (after initial sync from the server)", though its own file still says `default` (Jotunn holds the synced value in memory and doesn't write it to the client's file). The earlier connection, before the change, got `default` |
 | | | | &nbsp; | |
 | | | | **Remaining** | |
-| ⬜ | ⬜ | 28 | On the client, open F1 and find "Test value" (Quandru is admin, so the lock needs Valyyn) | Shown under "0 - Server (enforced)" with the server's value; locked for a non-admin |
-| ⬜ | ⬜ | 29 | As admin, change "Test value" in F1 | Every other connected client logs "QuanChat test value changed: <new value>" |
-| ⬜ | ⬜ | 30 | As a non-admin, edit your own `quandru.QuanChat.Server.cfg` to `mine` and reconnect | The server's value replaces it again on connect |
+| ⬜ | ⬜ | 28 | On the client, open F1 and find "Test value" | Shown under "0 - Server (enforced)" with the server's value (`server`) |
+| ⬜ | ⬜ | 29 | As admin, change "Test value" in F1 | The other connected client (also an admin is fine) logs "QuanChat test value changed: <new value>" |
+| ⬜ | ⬜ | 30 | Edit your own `quandru.QuanChat.Server.cfg` to `mine` (as admin is fine) and reconnect | The server's value replaces it again on connect |
 | ⬜ | ⬜ | 31 | **After 26–30:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins` |
+| ⬜ | ⬜ | 28b | **Deferred (15 Nov): needs a non-admin player**, and the first real enforced setting in a released version. Every current player is an admin. In F1, look at a "0 - Server (enforced)" setting | Locked: a non-admin can't change it |
+| ⬜ | ⬜ | 30b | **Deferred with 28b:** as a non-admin, edit your own copy of the server-enforced file and reconnect | The server's value replaces it again on connect |
 | | | | &nbsp; | |
 | | | | **In progress** | |
 | | | | *(nothing under way)* | |
@@ -246,3 +248,6 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
   using a separate local dedicated server. `quandru.QuanChat.Server.cfg` is written. **Afterwards (step 31):**
   remove the local 1.0.99 imports on the server and both PCs and go back to 1.0.1 before any later change is
   pushed.
+- **15 Nov 2026 (Quandru):** test 27 passes (see the table). The non-admin checks (lock in F1, a non-admin's own
+  file being replaced) are deferred as 28b and 30b: every current player is an admin, and nothing needs enforcing
+  yet. 1.0.99 is scaffolding for the first real enforced setting; check 28b and 30b once that ships.
