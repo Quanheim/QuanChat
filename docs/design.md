@@ -1,11 +1,17 @@
 # QuanChat: design
 
-Status: v1 agreed with Quandru, 7 Nov 2026. **Released as 1.0.0, 8 Nov 2026**, after every solo test step passed (see Test results); steps 1, 8, 15b and 21b, which need a second player, are still to check on the server. Valheim 1.0.21.
+Status: v1 agreed with Quandru, 7 Nov 2026. **Released as 1.0.0, 8 Nov 2026**, after every solo test step passed (see Test results); every step of the test script passed by 8 Nov 2026, including the multiplayer ones. Valheim 1.0.21.
 
 ## Purpose
 
 A chat mod for the Quanheim server with a feature set close to **BetterChat 1.6.4** (Crystal), fixing what bugs us
 most about vanilla chat. No other chat mod is in our modpack, so QuanChat has the chat to itself.
+
+## Credit
+
+**Decided (Quandru, 8 Nov 2026): no credit needed.** BetterChat was the inspiration for the feature set only:
+similar ideas, all our own code, nothing taken from it. If that changes (code, assets or a distinctive design
+reused), revisit this and credit Crystal.
 
 ## What vanilla does today (from `Chat` and `Terminal`)
 
@@ -80,6 +86,20 @@ owner's export, and Gale only lists, and only keeps an exclusion for, files that
 skipped the config on a dedicated server, so there was nothing to exclude. So `quandru.QuanChat.cfg` must exist on
 the server and be excluded from the master profile's export.
 
+**Changing server-enforced settings (found in the 1.0.99 test, 15 Nov 2026).** Enforced settings go in a second
+file, `quandru.QuanChat.Server.cfg`, synced by Jotunn, so the personal file can stay excluded from the Gale export.
+The test showed:
+- the server's value reaches every client on connect and replaces the client's own (tests 26, 27);
+- the Configuration Manager (F1) **doesn't list a second config file**, only the plugin's own `Config`;
+- Jotunn applies the synced value in memory only, so a client's file and Gale's editor keep showing the local
+  value;
+- nothing re-reads the file while the game runs, so a change needs a server restart.
+
+**Decide before the first real enforced setting (talk distance):** how an admin changes it live. Options: (a) watch
+the server's `quandru.QuanChat.Server.cfg` and reload it on edit (a change in Gale's editor on the server then
+reaches every player through Jotunn); (b) an admin chat or console command; (c) live with restart-to-change. Not
+decided.
+
 | Section | Setting | Default | Enforced / Personal | Description |
 |---|---|---|---|---|
 | `0 - General (personal)` | Starting channel | Shout | Personal | The channel you start in each time you log in. Shout reaches everyone; Say reaches players within 15 m. Switch during play with `/s` or `/say` on their own. |
@@ -140,6 +160,39 @@ a second player for the multi-player checks.
 | 20 | (0.2.1) Check the BepInEx log | One line: "Chat window laid out on a ... screen: box 500 x 400, 34 in from the bottom-right corner, ... root found, window <screen size in canvas units>, background made even." |
 | 21 | (0.2.4) Type a message past 127 characters | It keeps going to 200 and arrives whole for the second player. Judge the floating text over your head at that length. |
 
+## Test script: 1.0.1 and 1.0.99
+
+Written 10 Nov 2026. QuanChat's own table, never combined with another mod's; show it in Quandru's layout (workspace
+memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the original script above, all passed by 8 Nov.
+
+- **1.0.1** (released 10 Nov): on the live server, through the shared Gale profile.
+- **1.0.99** (branch `test/server-config`, never released): a coordinated test on a **local** dedicated server with
+  a client, from `dist\Quandru-QuanChat-1.0.99.zip` imported into a separate Gale test profile. Never put it in
+  the shared profile: its version sorts above any real 1.0.x. It tests a second config file,
+  `quandru.QuanChat.Server.cfg`, with one admin-only dummy setting synced by Jotunn, as groundwork for the first
+  enforced setting (talk distance).
+
+| Test | OK | # | Do | Expect / Result |
+|---|---|---|---|---|
+| | | | **Done** | |
+| ✅ | ✅ | 1–22 | Original test script (0.x to 1.0.0) | **Passed by 8 Nov 2026:** details in Test results |
+| ✅ | ✅ | 23 | Update QuanChat to 1.0.1 in the server's Gale profile, push, restart the server; everyone pulls | **Passed:** 1.0.1 ran on the server for several days; `quandru.QuanChat.cfg` is in the server profile (listed in Gale's synced files) |
+| ✅ | ✅ | 24 | In the server's (master) Gale profile, exclude `quandru.QuanChat.cfg` from the export, then push | **Passed:** unticked in the master profile's "Manage synced files" (done when 1.0.1 went on) |
+| ✅ | ✅ | 25 | On your PC, change a QuanChat setting (e.g. Width), then pull the profile and restart the game | **Passed (Valyyn's PC):** his own values (Always show off, Height 75, Idle opacity 10, Seconds until idle 15, Width 135) survived several pulls, with "Keep additional mods and config" off: the file was neither overwritten nor deleted |
+| ✅ | ✅ | 26 | **1.0.99 on the live server (15 Nov), imported locally on the server and each PC, not pushed:** server started | **Passed:** server log "QuanChat test value (local file): default" right after "Loading [QuanChat 1.0.99]", then the usual dedicated-server line; `quandru.QuanChat.Server.cfg` written (Gale: "Created by QuanChat v1.0.99", Test value `default`) |
+| ✅ | ✅ | 27 | Stop the server, set "Test value" in its `quandru.QuanChat.Server.cfg` to `server`, start it, connect a client | **Passed:** server log "test value (local file): server"; Quandru's client "test value changed: server" then "test value: server (after initial sync from the server)", though its own file still says `default` (Jotunn holds the synced value in memory and doesn't write it to the client's file). The earlier connection, before the change, got `default` |
+| ✅ | ✅ | 28 | On the client, open F1 and find "Test value" | **Answered (15 Nov):** F1 doesn't list it. The Configuration Manager shows only the plugin's own `Config`, not a second `ConfigFile`. Gale's editor shows the file, but with the file's value (`default`), not the synced one: Jotunn applies the server's value in memory only. The value in use shows only in the log (27) |
+| ✅ | ✅ | 29 | As admin, change "Test value" in F1 | **Not possible in 1.0.99 (15 Nov):** F1 doesn't list the file, and nothing re-reads it while the game runs, so there's no live way to change it. Design point below ("Changing server-enforced settings") |
+| | | | &nbsp; | |
+| | | | **Remaining** | |
+| ⬜ | ⬜ | 30 | Edit your own `quandru.QuanChat.Server.cfg` to `mine` (as admin is fine), **restart the game** (the file is only read at startup), connect | Client log "test value (local file): mine" at startup, then "test value: server (after initial sync from the server)" |
+| ⬜ | ⬜ | 31 | **After 26–30:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins` |
+| ⬜ | ⬜ | 28b | **Deferred (15 Nov): needs a non-admin player**, and the first real enforced setting in a released version, with whatever way of changing it is chosen (Settings, "Changing server-enforced settings"). Every current player is an admin | A non-admin can't change it |
+| ⬜ | ⬜ | 30b | **Deferred with 28b:** as a non-admin, edit your own copy of the server-enforced file and reconnect | The server's value replaces it again on connect |
+| | | | &nbsp; | |
+| | | | **In progress** | |
+| | | | *(nothing under way)* | |
+
 ## Test results
 
 - **7 Nov 2026 (Quandru):** step 2, the placeholder is clear and readable, so it stays as the channel indicator.
@@ -196,3 +249,23 @@ a second player for the multi-player checks.
   one shout and leaves the channel in Say. Left for a second player: steps 1, 8, 15b, 21b.
 - **8 Nov 2026 (Quandru):** released 1.0.0 (0.2.7's code, plus a real icon) with the second-player steps
   still to check once it's on the server.
+- **8 Nov 2026 (Quandru):** steps 1, 15b and 21b work, seen in multiplayer play on the server: messages reach the
+  other player as typed, they start in Shout, and several long messages were sent and received whole. Left: step 8.
+- **8 Nov 2026 (Quandru):** step 8 works: a second player's shout flashes no pin on the big map. Every step of
+  the original test script now passes.
+- **15 Nov 2026 (Quandru, Valyyn):** steps 23–25 pass. 1.0.1 had been on the server for days with
+  `quandru.QuanChat.cfg` already unticked in the master profile's synced files. Valyyn's own QuanChat settings
+  survived every pull with "Keep additional mods and config" off, so an excluded file is neither overwritten nor
+  deleted on the client, as Gale's source said.
+- **15 Nov 2026 (Quandru):** for the 26–30 test with Valyyn, 1.0.99 was imported locally into the live server's
+  profile and into each player's own local copy of the profile, **not pushed** through Gale's sync, instead of
+  using a separate local dedicated server. `quandru.QuanChat.Server.cfg` is written. **Afterwards (step 31):**
+  remove the local 1.0.99 imports on the server and both PCs and go back to 1.0.1 before any later change is
+  pushed.
+- **15 Nov 2026 (Quandru):** test 27 passes (see the table). The non-admin checks (lock in F1, a non-admin's own
+  file being replaced) are deferred as 28b and 30b: every current player is an admin, and nothing needs enforcing
+  yet. 1.0.99 is scaffolding for the first real enforced setting; check 28b and 30b once that ships.
+- **15 Nov 2026 (Quandru):** 28 answered: F1 doesn't list the second config file, and the client's file keeps its
+  own value while the synced one is used in memory. So 29 (change it live in F1) isn't possible in 1.0.99. Recorded
+  under Settings, "Changing server-enforced settings", to decide before talk distance. 30 now needs a game restart,
+  since the file is only read at startup.
