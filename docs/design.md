@@ -171,9 +171,10 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 | ⬜ | ⬜ | 28 | On the client, open F1 and find "Test value" | Shown under "0 - Server (enforced)" with the server's value; locked for a non-admin |
 | ⬜ | ⬜ | 29 | As admin, change "Test value" in F1 | Every other connected client logs "QuanChat test value changed: <new value>" |
 | ⬜ | ⬜ | 30 | As a non-admin, edit your own `quandru.QuanChat.Server.cfg` to `mine` and reconnect | The server's value replaces it again on connect |
+| ⬜ | ⬜ | 31 | **After 26–30:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins` |
 | | | | &nbsp; | |
 | | | | **In progress** | |
-| ✅ | ⬜ | 26 | **1.0.99, run on the live server instead of a local one (15 Nov):** 1.0.99 in the server's Gale profile, server started | `quandru.QuanChat.Server.cfg` written next to `quandru.QuanChat.cfg` (seen: Gale shows it, "Created by QuanChat v1.0.99", Test value `default`). Still to check: server log "QuanChat test value (local file): default" |
+| ✅ | ⬜ | 26 | **1.0.99 on the live server (15 Nov), imported locally on the server and each PC, not pushed:** server started | `quandru.QuanChat.Server.cfg` written next to `quandru.QuanChat.cfg` (seen: Gale shows it, "Created by QuanChat v1.0.99", Test value `default`). Still to check: server log "QuanChat test value (local file): default" |
 
 ## Test results
 
@@ -239,7 +240,8 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
   `quandru.QuanChat.cfg` already unticked in the master profile's synced files. Valyyn's own QuanChat settings
   survived every pull with "Keep additional mods and config" off, so an excluded file is neither overwritten nor
   deleted on the client, as Gale's source said.
-- **15 Nov 2026 (Quandru):** 1.0.99 put on the **live** server (shared profile) for the 26–30 test with Valyyn,
-  instead of a local dedicated server; clients picked it up through the sync. `quandru.QuanChat.Server.cfg` is
-  written and ticked for sync. **Afterwards:** remove the 1.0.99 import from the server profile and reinstall 1.0.1
-  from Thunderstore before clients pull, or they keep 1.0.99 (and a later store install sits beside it).
+- **15 Nov 2026 (Quandru):** for the 26–30 test with Valyyn, 1.0.99 was imported locally into the live server's
+  profile and into each player's own local copy of the profile, **not pushed** through Gale's sync, instead of
+  using a separate local dedicated server. `quandru.QuanChat.Server.cfg` is written. **Afterwards (step 31):**
+  remove the local 1.0.99 imports on the server and both PCs and go back to 1.0.1 before any later change is
+  pushed.
