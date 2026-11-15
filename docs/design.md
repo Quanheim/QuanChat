@@ -162,19 +162,18 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 |---|---|---|---|---|
 | | | | **Done** | |
 | ✅ | ✅ | 1–22 | Original test script (0.x to 1.0.0) | **Passed by 8 Nov 2026:** details in Test results |
+| ✅ | ✅ | 23 | Update QuanChat to 1.0.1 in the server's Gale profile, push, restart the server; everyone pulls | **Passed:** 1.0.1 ran on the server for several days; `quandru.QuanChat.cfg` is in the server profile (listed in Gale's synced files) |
+| ✅ | ✅ | 24 | In the server's (master) Gale profile, exclude `quandru.QuanChat.cfg` from the export, then push | **Passed:** unticked in the master profile's "Manage synced files" (done when 1.0.1 went on) |
+| ✅ | ✅ | 25 | On your PC, change a QuanChat setting (e.g. Width), then pull the profile and restart the game | **Passed (Valyyn's PC):** his own values (Always show off, Height 75, Idle opacity 10, Seconds until idle 15, Width 135) survived several pulls, with "Keep additional mods and config" off: the file was neither overwritten nor deleted |
 | | | | &nbsp; | |
 | | | | **Remaining** | |
-| ⬜ | ⬜ | 23 | Update QuanChat to 1.0.1 in the server's Gale profile, push, restart the server; everyone pulls | Server log: "QuanChat 1.0.1 loaded on a dedicated server … Its config file is written so it can be excluded from the Gale profile's export"; `quandru.QuanChat.cfg` now in the server profile's `BepInEx\config` |
-| ⬜ | ⬜ | 24 | In the server's (master) Gale profile, exclude `quandru.QuanChat.cfg` from the export, then push | Gale lists the file as excluded |
-| ⬜ | ⬜ | 25 | On your PC, change a QuanChat setting (e.g. Width), then pull the profile and restart the game | The setting is still your value, not reset |
-| ⬜ | ⬜ | 26 | **1.0.99, local:** import the 1.0.99 zip into a separate Gale test profile, start a local dedicated server from it | Server log "QuanChat test value (local file): default"; `quandru.QuanChat.Server.cfg` written next to `quandru.QuanChat.cfg` |
 | ⬜ | ⬜ | 27 | Stop the server, set "Test value" in its `quandru.QuanChat.Server.cfg` to `server`, start it, connect a client | Client log "QuanChat test value: server (after initial sync from the server)" |
 | ⬜ | ⬜ | 28 | On the client, open F1 and find "Test value" | Shown under "0 - Server (enforced)" with the server's value; locked for a non-admin |
 | ⬜ | ⬜ | 29 | As admin, change "Test value" in F1 | Every other connected client logs "QuanChat test value changed: <new value>" |
 | ⬜ | ⬜ | 30 | As a non-admin, edit your own `quandru.QuanChat.Server.cfg` to `mine` and reconnect | The server's value replaces it again on connect |
 | | | | &nbsp; | |
 | | | | **In progress** | |
-| | | | *(nothing under way)* | |
+| ✅ | ⬜ | 26 | **1.0.99, run on the live server instead of a local one (15 Nov):** 1.0.99 in the server's Gale profile, server started | `quandru.QuanChat.Server.cfg` written next to `quandru.QuanChat.cfg` (seen: Gale shows it, "Created by QuanChat v1.0.99", Test value `default`). Still to check: server log "QuanChat test value (local file): default" |
 
 ## Test results
 
@@ -236,3 +235,11 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
   other player as typed, they start in Shout, and several long messages were sent and received whole. Left: step 8.
 - **8 Nov 2026 (Quandru):** step 8 works: a second player's shout flashes no pin on the big map. Every step of
   the original test script now passes.
+- **15 Nov 2026 (Quandru, Valyyn):** steps 23–25 pass. 1.0.1 had been on the server for days with
+  `quandru.QuanChat.cfg` already unticked in the master profile's synced files. Valyyn's own QuanChat settings
+  survived every pull with "Keep additional mods and config" off, so an excluded file is neither overwritten nor
+  deleted on the client, as Gale's source said.
+- **15 Nov 2026 (Quandru):** 1.0.99 put on the **live** server (shared profile) for the 26–30 test with Valyyn,
+  instead of a local dedicated server; clients picked it up through the sync. `quandru.QuanChat.Server.cfg` is
+  written and ticked for sync. **Afterwards:** remove the 1.0.99 import from the server profile and reinstall 1.0.1
+  from Thunderstore before clients pull, or they keep 1.0.99 (and a later store install sits beside it).
