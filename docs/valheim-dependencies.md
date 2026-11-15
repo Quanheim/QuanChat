@@ -65,6 +65,9 @@ a change in behaviour isn't, so list the ones whose behaviour the mod depends on
 | `Console.IsVisible` | No scrolling while the F5 console is open. |
 | `TextInput.IsVisible` | No scrolling while a sign or text popup is open. |
 | `ZInput.GetButtonDown` | Reads `ScrollChatUp`/`ScrollChatDown` (and the Joy versions) while not typing. |
+| `ZNet.instance` | Whether a world is running when the server settings file is edited. |
+| `ZNet.IsServer` | Only the server (or a host) reloads an edited server settings file; a connected client logs that its edit is ignored. |
+| `ZNet.GetPeers` | Whether anyone is connected, for the log line after a reload. |
 
 ### Behaviour the mod assumes
 
@@ -98,3 +101,4 @@ after each update.
 | Chat input placeholder (`m_input.placeholder`, a TextMeshPro text) | Shows `[Shout]` / `[Say]` before vanilla's placeholder text. | The placeholder stops being TextMeshPro text: the indicator silently stops. |
 | BepInEx Configuration Manager (`com.bepis.bepinex.configurationmanager`, optional mod) | Its public `DisplayingWindow` property, read by reflection, keeps the chat up while its window is open. | Renamed: the chat hides behind the Esc menu again while changing settings. |
 | Key bindings `ScrollChatUp`, `ScrollChatDown` (Page Up, Page Down) | Scrolling without typing. | Renamed in `ZInput`. |
+| Jotunn `SynchronizationManager` (2.30.2, not game code) | `RegisterCustomConfig` syncs `quandru.QuanChat.Server.cfg`. Relied on: it sends admin-only values to clients on connect, holds them in memory only, ignores a connected client's file values, caches the server's values at `ZNet.Start` and, on `ConfigReloaded`, sends changed values to every peer. `ServerConfig` reloads the file when it's edited. | Jotunn changes how custom configs sync: the server's value stops reaching clients, or an edit needs a restart again. |

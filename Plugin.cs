@@ -28,7 +28,10 @@ namespace QuanChat
             // personal, so the server's copy must be excluded from the Gale profile's export; Gale can only exclude a
             // file that exists, and without the exclusion each sync deletes every player's own copy.
             Settings.Bind(Config);
-            ServerSettingsTest.Bind(Info.Metadata); // TEST BUILD ONLY
+            // Server-enforced settings: their own file, synced by Jotunn and watched for edits (see ServerConfig).
+            ServerConfig.Create(Info.Metadata);
+            ServerSettingsTest.Bind(); // TEST BUILD ONLY
+            ServerConfig.Register();
 
             // A dedicated server has no chat window, so there's nothing else for QuanChat to do there.
             if (IsDedicatedServer())
@@ -43,6 +46,10 @@ namespace QuanChat
             new Harmony(PluginGuid).PatchAll(typeof(Plugin).Assembly);
             Logger.LogInfo($"{PluginName} {PluginVersion} loaded.");
         }
+
+        // Runs on the server too (Awake returning early doesn't stop it), which is where edits to the server
+        // settings file matter.
+        private void Update() => ServerConfig.Update();
 
         // Valheim's dedicated server runs headless: no graphics device, batch mode.
         private static bool IsDedicatedServer() =>
