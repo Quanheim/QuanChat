@@ -95,13 +95,18 @@ The test showed:
   value;
 - nothing re-reads the file while the game runs, so a change needs a server restart.
 
-**Decided (Quandru, 15 Nov 2026): watch the file.** `ServerConfig` (on `test/server-config`, in the 1.0.99 test
-build) owns `quandru.QuanChat.Server.cfg`: it creates the file, registers it with Jotunn and watches it. When the
-server's copy is edited (by hand or in Gale's config editor on the server) the server reloads it, and Jotunn sends the
-changed values to every connected player without a restart. A connected client's own edit is ignored and logged as
-such. Quandru weighed leaving it out, since nothing needs enforcing yet and Gale's push updates the file anyway, but
-chose to build the scaffolding properly now, so the first real setting (talk distance) arrives on a tested base.
-Merge `ServerConfig` into main with that setting; `ServerSettingsTest` stays test-only.
+**Decided (Quandru, 15 Nov 2026): one file, admin-only settings in it.** Enforced settings go in
+`quandru.QuanChat.cfg` itself, in their own section after the personal ones (`3 - Server (admin only)`; sections
+are never renamed after release), marked `IsAdminOnly` for Jotunn, as other mods do. Admins change them live in F1;
+Jotunn sends the change to the server, which saves it and passes it to every player; non-admins see them locked. The
+file's exclusion from the Gale export doesn't matter: Jotunn sends the server's own values on connect and ignores a
+connected player's copy. Editing the server's file directly still needs a restart, which F1 makes rare. This is now
+the workspace convention too (template `docs/DEVELOPMENT.md`, "Server-enforced or personal").
+
+**Rejected (15 Nov 2026):** a second file, `quandru.QuanChat.Server.cfg`, registered with `RegisterCustomConfig`,
+plus a file watcher that reloaded the server's copy on edit so changes went out without a restart. Briefly built
+(`ServerConfig`, commit `57964ab` on `test/server-config`), never tested in game. It worked around F1 not showing
+the file; putting the settings in the main file removes the problem instead. The test build now uses the main file.
 
 | Section | Setting | Default | Enforced / Personal | Description |
 |---|---|---|---|---|
@@ -188,13 +193,13 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 | ✅ | ✅ | 29 | As admin, change "Test value" in F1 | **Not possible in 1.0.99 (15 Nov):** F1 doesn't list the file, and nothing re-reads it while the game runs, so there's no live way to change it. Design point below ("Changing server-enforced settings") |
 | | | | &nbsp; | |
 | | | | **Remaining** | |
-| ⬜ | ⬜ | 30 | Edit your own `quandru.QuanChat.Server.cfg` to `mine` (as admin is fine), **restart the game** (the file is only read at startup), connect | Client log "test value (local file): mine" at startup, then "test value: server (after initial sync from the server)" |
-| ⬜ | ⬜ | 32 | **Needs the second 1.0.99 build (15 Nov, file watcher):** remove the old 1.0.99 import and import the new zip on the server and both PCs (not pushed); start the server | Server log "Watching quandru.QuanChat.Server.cfg for edits. On a server, an edit reaches every connected player without a restart." |
-| ⬜ | ⬜ | 33 | With both of you connected, on the server change "Test value" to `live` (Gale's editor or by hand) and save. Don't restart | Server log "…was edited and has been reloaded. Changed values are being sent to every connected player now." and "test value changed: live"; each client log "test value changed: live" and "test value: live (after later sync from the server)" |
-| ⬜ | ⬜ | 34 | While connected, edit your own `quandru.QuanChat.Server.cfg` on your PC and save | Client log "…was edited, but you're connected to a server, which sets these values…"; the value in use stays `live` |
-| ⬜ | ⬜ | 31 | **After 26–34:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins` |
-| ⬜ | ⬜ | 28b | **Deferred (15 Nov): needs a non-admin player**, and the first real enforced setting in a released version, with whatever way of changing it is chosen (Settings, "Changing server-enforced settings"). Every current player is an admin | A non-admin can't change it |
-| ⬜ | ⬜ | 30b | **Deferred with 28b:** as a non-admin, edit your own copy of the server-enforced file and reconnect | The server's value replaces it again on connect |
+| ⬜ | ⬜ | 32 | **Needs the new 1.0.99 build (15 Nov 23:55, setting in the main file):** replace the 1.0.99 import on the server and both PCs (not pushed), delete any leftover `quandru.QuanChat.Server.cfg`, start the server | Server log "QuanChat test value (local file): default"; the server's `quandru.QuanChat.cfg` gains a `3 - Server (admin only)` section |
+| ⬜ | ⬜ | 33 | With both of you connected, open F1, set "Test value" (under "3 - Server (admin only)") to `live`, close F1 | Your log "test value changed: live"; Valyyn's log "test value changed: live" and "test value: live (after later sync from the server)"; the server's file now says `live` |
+| ⬜ | ⬜ | 34 | Valyyn (also an admin) sets it to `val` in F1 and closes F1 | Your log "test value changed: val"; the server's file says `val` |
+| ⬜ | ⬜ | 30 | Set "Test value" to `mine` in your own `quandru.QuanChat.cfg` while the game is closed, start the game, connect | Your log "test value (local file): mine" at startup, then "test value: val (after initial sync from the server)" |
+| ⬜ | ⬜ | 31 | **After 30–34:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins`. The `3 - Server (admin only)` section stays in the files until BepInEx drops it; harmless |
+| ⬜ | ⬜ | 28b | **Deferred (15 Nov): needs a non-admin player** and the first real enforced setting. Every current player is an admin | In F1 the "Server (admin only)" settings are locked for a non-admin |
+| ⬜ | ⬜ | 30b | **Deferred with 28b:** as a non-admin, change an admin-only setting in your own `quandru.QuanChat.cfg` and reconnect | The server's value is used again on connect |
 | | | | &nbsp; | |
 | | | | **In progress** | |
 | | | | *(nothing under way)* | |
@@ -277,3 +282,7 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
   since the file is only read at startup.
 - **15 Nov 2026 (Quandru):** decided to watch the server's settings file (Settings, "Changing server-enforced
   settings"). Second 1.0.99 build on `test/server-config` adds `ServerConfig`; tests 32–34 check it.
+- **15 Nov 2026 (Quandru):** reversed before testing: other mods keep admin settings in their main config and
+  admins change them in F1, which is better. Third 1.0.99 build: the test setting in `quandru.QuanChat.cfg` under
+  `3 - Server (admin only)`, no second file, no watcher. Tests 30 and 32–34 rewritten for it. Made the workspace
+  convention.
