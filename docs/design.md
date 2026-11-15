@@ -86,6 +86,20 @@ owner's export, and Gale only lists, and only keeps an exclusion for, files that
 skipped the config on a dedicated server, so there was nothing to exclude. So `quandru.QuanChat.cfg` must exist on
 the server and be excluded from the master profile's export.
 
+**Changing server-enforced settings (found in the 1.0.99 test, 15 Nov 2026).** Enforced settings go in a second
+file, `quandru.QuanChat.Server.cfg`, synced by Jotunn, so the personal file can stay excluded from the Gale export.
+The test showed:
+- the server's value reaches every client on connect and replaces the client's own (tests 26, 27);
+- the Configuration Manager (F1) **doesn't list a second config file**, only the plugin's own `Config`;
+- Jotunn applies the synced value in memory only, so a client's file and Gale's editor keep showing the local
+  value;
+- nothing re-reads the file while the game runs, so a change needs a server restart.
+
+**Decide before the first real enforced setting (talk distance):** how an admin changes it live. Options: (a) watch
+the server's `quandru.QuanChat.Server.cfg` and reload it on edit (a change in Gale's editor on the server then
+reaches every player through Jotunn); (b) an admin chat or console command; (c) live with restart-to-change. Not
+decided.
+
 | Section | Setting | Default | Enforced / Personal | Description |
 |---|---|---|---|---|
 | `0 - General (personal)` | Starting channel | Shout | Personal | The channel you start in each time you log in. Shout reaches everyone; Say reaches players within 15 m. Switch during play with `/s` or `/say` on their own. |
@@ -166,14 +180,14 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 | ✅ | ✅ | 24 | In the server's (master) Gale profile, exclude `quandru.QuanChat.cfg` from the export, then push | **Passed:** unticked in the master profile's "Manage synced files" (done when 1.0.1 went on) |
 | ✅ | ✅ | 25 | On your PC, change a QuanChat setting (e.g. Width), then pull the profile and restart the game | **Passed (Valyyn's PC):** his own values (Always show off, Height 75, Idle opacity 10, Seconds until idle 15, Width 135) survived several pulls, with "Keep additional mods and config" off: the file was neither overwritten nor deleted |
 | ✅ | ✅ | 26 | **1.0.99 on the live server (15 Nov), imported locally on the server and each PC, not pushed:** server started | **Passed:** server log "QuanChat test value (local file): default" right after "Loading [QuanChat 1.0.99]", then the usual dedicated-server line; `quandru.QuanChat.Server.cfg` written (Gale: "Created by QuanChat v1.0.99", Test value `default`) |
+| ✅ | ✅ | 28 | On the client, open F1 and find "Test value" | **Answered (15 Nov):** F1 doesn't list it. The Configuration Manager shows only the plugin's own `Config`, not a second `ConfigFile`. Gale's editor shows the file, but with the file's value (`default`), not the synced one: Jotunn applies the server's value in memory only. The value in use shows only in the log (27) |
+| ✅ | ✅ | 29 | As admin, change "Test value" in F1 | **Not possible in 1.0.99 (15 Nov):** F1 doesn't list the file, and nothing re-reads it while the game runs, so there's no live way to change it. Design point below ("Changing server-enforced settings") |
 | ✅ | ✅ | 27 | Stop the server, set "Test value" in its `quandru.QuanChat.Server.cfg` to `server`, start it, connect a client | **Passed:** server log "test value (local file): server"; Quandru's client "test value changed: server" then "test value: server (after initial sync from the server)", though its own file still says `default` (Jotunn holds the synced value in memory and doesn't write it to the client's file). The earlier connection, before the change, got `default` |
 | | | | &nbsp; | |
 | | | | **Remaining** | |
-| ⬜ | ⬜ | 28 | On the client, open F1 and find "Test value" | Shown under "0 - Server (enforced)" with the server's value (`server`) |
-| ⬜ | ⬜ | 29 | As admin, change "Test value" in F1 | The other connected client (also an admin is fine) logs "QuanChat test value changed: <new value>" |
-| ⬜ | ⬜ | 30 | Edit your own `quandru.QuanChat.Server.cfg` to `mine` (as admin is fine) and reconnect | The server's value replaces it again on connect |
+| ⬜ | ⬜ | 30 | Edit your own `quandru.QuanChat.Server.cfg` to `mine` (as admin is fine), **restart the game** (the file is only read at startup), connect | Client log "test value (local file): mine" at startup, then "test value: server (after initial sync from the server)" |
 | ⬜ | ⬜ | 31 | **After 26–30:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins` |
-| ⬜ | ⬜ | 28b | **Deferred (15 Nov): needs a non-admin player**, and the first real enforced setting in a released version. Every current player is an admin. In F1, look at a "0 - Server (enforced)" setting | Locked: a non-admin can't change it |
+| ⬜ | ⬜ | 28b | **Deferred (15 Nov): needs a non-admin player**, and the first real enforced setting in a released version, with whatever way of changing it is chosen (Settings, "Changing server-enforced settings"). Every current player is an admin | A non-admin can't change it |
 | ⬜ | ⬜ | 30b | **Deferred with 28b:** as a non-admin, edit your own copy of the server-enforced file and reconnect | The server's value replaces it again on connect |
 | | | | &nbsp; | |
 | | | | **In progress** | |
@@ -251,3 +265,7 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 - **15 Nov 2026 (Quandru):** test 27 passes (see the table). The non-admin checks (lock in F1, a non-admin's own
   file being replaced) are deferred as 28b and 30b: every current player is an admin, and nothing needs enforcing
   yet. 1.0.99 is scaffolding for the first real enforced setting; check 28b and 30b once that ships.
+- **15 Nov 2026 (Quandru):** 28 answered: F1 doesn't list the second config file, and the client's file keeps its
+  own value while the synced one is used in memory. So 29 (change it live in F1) isn't possible in 1.0.99. Recorded
+  under Settings, "Changing server-enforced settings", to decide before talk distance. 30 now needs a game restart,
+  since the file is only read at startup.
