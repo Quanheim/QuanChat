@@ -95,10 +95,13 @@ The test showed:
   value;
 - nothing re-reads the file while the game runs, so a change needs a server restart.
 
-**Decide before the first real enforced setting (talk distance):** how an admin changes it live. Options: (a) watch
-the server's `quandru.QuanChat.Server.cfg` and reload it on edit (a change in Gale's editor on the server then
-reaches every player through Jotunn); (b) an admin chat or console command; (c) live with restart-to-change. Not
-decided.
+**Decided (Quandru, 15 Nov 2026): watch the file.** `ServerConfig` (on `test/server-config`, in the 1.0.99 test
+build) owns `quandru.QuanChat.Server.cfg`: it creates the file, registers it with Jotunn and watches it. When the
+server's copy is edited (by hand or in Gale's config editor on the server) the server reloads it, and Jotunn sends the
+changed values to every connected player without a restart. A connected client's own edit is ignored and logged as
+such. Quandru weighed leaving it out, since nothing needs enforcing yet and Gale's push updates the file anyway, but
+chose to build the scaffolding properly now, so the first real setting (talk distance) arrives on a tested base.
+Merge `ServerConfig` into main with that setting; `ServerSettingsTest` stays test-only.
 
 | Section | Setting | Default | Enforced / Personal | Description |
 |---|---|---|---|---|
@@ -186,7 +189,10 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 | | | | &nbsp; | |
 | | | | **Remaining** | |
 | ⬜ | ⬜ | 30 | Edit your own `quandru.QuanChat.Server.cfg` to `mine` (as admin is fine), **restart the game** (the file is only read at startup), connect | Client log "test value (local file): mine" at startup, then "test value: server (after initial sync from the server)" |
-| ⬜ | ⬜ | 31 | **After 26–30:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins` |
+| ⬜ | ⬜ | 32 | **Needs the second 1.0.99 build (15 Nov, file watcher):** remove the old 1.0.99 import and import the new zip on the server and both PCs (not pushed); start the server | Server log "Watching quandru.QuanChat.Server.cfg for edits. On a server, an edit reaches every connected player without a restart." |
+| ⬜ | ⬜ | 33 | With both of you connected, on the server change "Test value" to `live` (Gale's editor or by hand) and save. Don't restart | Server log "…was edited and has been reloaded. Changed values are being sent to every connected player now." and "test value changed: live"; each client log "test value changed: live" and "test value: live (after later sync from the server)" |
+| ⬜ | ⬜ | 34 | While connected, edit your own `quandru.QuanChat.Server.cfg` on your PC and save | Client log "…was edited, but you're connected to a server, which sets these values…"; the value in use stays `live` |
+| ⬜ | ⬜ | 31 | **After 26–34:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins` |
 | ⬜ | ⬜ | 28b | **Deferred (15 Nov): needs a non-admin player**, and the first real enforced setting in a released version, with whatever way of changing it is chosen (Settings, "Changing server-enforced settings"). Every current player is an admin | A non-admin can't change it |
 | ⬜ | ⬜ | 30b | **Deferred with 28b:** as a non-admin, edit your own copy of the server-enforced file and reconnect | The server's value replaces it again on connect |
 | | | | &nbsp; | |
@@ -269,3 +275,5 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
   own value while the synced one is used in memory. So 29 (change it live in F1) isn't possible in 1.0.99. Recorded
   under Settings, "Changing server-enforced settings", to decide before talk distance. 30 now needs a game restart,
   since the file is only read at startup.
+- **15 Nov 2026 (Quandru):** decided to watch the server's settings file (Settings, "Changing server-enforced
+  settings"). Second 1.0.99 build on `test/server-config` adds `ServerConfig`; tests 32–34 check it.
