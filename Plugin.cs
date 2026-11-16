@@ -24,13 +24,13 @@ namespace QuanChat
         {
             Log = Logger;
 
-            // The config file is written on a dedicated server too, though nothing there reads it. Every setting is
-            // personal, so the server's copy must be excluded from the Gale profile's export; Gale can only exclude a
-            // file that exists, and without the exclusion each sync deletes every player's own copy.
+            // The config file is written on a dedicated server too. Its personal settings mean the server's copy must
+            // be excluded from the Gale profile's export; Gale can only exclude a file that exists, and without the
+            // exclusion each sync deletes every player's own copy.
             Settings.Bind(Config);
             // Server-enforced settings go in the same file, admin-only, and Jotunn syncs them from the server's own
-            // copy, so the export exclusion doesn't stop them reaching players.
-            ServerSettingsTest.Bind(Config); // TEST BUILD ONLY
+            // copy, so the export exclusion doesn't stop them reaching players. 1.0.2 has only a placeholder.
+            ServerSettingsTest.Bind(Config);
 
             // A dedicated server has no chat window, so there's nothing else for QuanChat to do there.
             if (IsDedicatedServer())

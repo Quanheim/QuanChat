@@ -121,6 +121,7 @@ the file; putting the settings in the main file removes the problem instead. The
 | | Space between messages | Off | Personal | A small gap between messages. |
 | | Hide shout map pings | On | Personal | Shouts don't flash a pin on your map. |
 | | Font size | 18 | Personal | Size of the chat text in points (10–40). The input box grows with it. |
+| `3 - Server (admin only)` | Test value | default | Enforced | Placeholder from 1.0.2 (Quandru, 16 Nov 2026: shipped so the server side is tested live under a real published version). Changes nothing; logs its value. Replaced by the first real enforced setting. |
 
 ## How it would work (outline)
 
@@ -195,9 +196,11 @@ memory "Quandru's test table") while testing QuanChat. Steps 1–22 are the orig
 | ✅ | ✅ | 33 | With both of you connected, open F1, set "Test value" (under "3 - Server (admin only)") to `live`, close F1 | **Passed (16 Nov):** Quandru's log "changed: live" (also once per keystroke while typing in F1; Jotunn sends only on close), then "live (after later sync from the server)"; Valyyn's log "changed: live" and "live (after later sync from the server)" with no reconnect; the server's file says `live` (Gale). Quandru's own file still says `default`: Jotunn keeps synced values out of a client's file, even an admin's own change |
 | ✅ | ✅ | 34 | Valyyn (also an admin) sets it to `val` in F1 and closes F1 | **Passed (16 Nov):** Quandru's log "changed: val" and "val (after later sync from the server)", no reconnect; Valyyn's log the same after his keystrokes; the server's file says `val` (Gale). Either admin's F1 change reaches the server and every player |
 | ✅ | ✅ | 30 | Set "Test value" to `mine` in your own `quandru.QuanChat.cfg` while the game is closed, start the game, connect | **Passed (16 Nov):** log "local file: mine" at startup; on joining, "changed: default" (Jotunn's `InitAdminState` stores local admin-only values and resets them to defaults until the server's arrive), then "changed: val" and "val (after initial sync from the server)". The file still says `mine` (Jotunn restores local values on leaving). A player's own copy is never used online |
+| ✅ | ✅ | 31 | **After 30–34:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | **Done (16 Nov, as reported):** Valyyn deleted his test profile; Quandru's test profile and the server have 1.0.99 removed and 1.0.1 reinstalled from Thunderstore. No profile push made |
 | | | | &nbsp; | |
 | | | | **Remaining** | |
-| ⬜ | ⬜ | 31 | **After 30–34:** remove the local 1.0.99 imports on the server and both PCs, back to 1.0.1 (not pushed at any point) | Server and clients show QuanChat 1.0.1, and only one QuanChat folder in `BepInEx\plugins`. The `3 - Server (admin only)` section stays in the files until BepInEx drops it; harmless |
+| ⬜ | ⬜ | 35 | **Needs 1.0.2 published:** update QuanChat to 1.0.2 from Thunderstore in the server's Gale profile, keep `quandru.QuanChat.cfg` excluded, push, restart the server; everyone pulls | Server log "QuanChat 1.0.2 loaded on a dedicated server" and "test value (local file): …" (the server's file may still hold `val` from the 1.0.99 test); each client "test value: <server's value> (after initial sync from the server)"; players' personal settings unchanged |
+| ⬜ | ⬜ | 36 | With players connected, an admin changes "Test value" in F1 and closes it | Every other player's log "test value changed: <new value>" with no reconnect; the server's file holds the new value |
 | ⬜ | ⬜ | 28b | **Deferred (15 Nov): needs a non-admin player** and the first real enforced setting. Every current player is an admin | In F1 the "Server (admin only)" settings are locked for a non-admin |
 | ⬜ | ⬜ | 30b | **Deferred with 28b:** as a non-admin, change an admin-only setting in your own `quandru.QuanChat.cfg` and reconnect | The server's value is used again on connect |
 | | | | &nbsp; | |

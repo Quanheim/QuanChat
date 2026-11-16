@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 - 2026-11-16
+
+- Groundwork for server-enforced settings. A new section, *3 - Server (admin only)*, holds one placeholder setting,
+  *Test value*, which changes nothing in game. Its value comes from the server: admins can change it in the
+  Configuration Manager (F1) and every player gets the change straight away. Future settings that affect everyone,
+  such as how far chat carries, will live here. Personal settings work exactly as before.
+
 ## 1.0.1 - 2026-11-10
 
 - The dedicated server now writes its own `quandru.QuanChat.cfg` (nothing there uses it). A server owner who shares

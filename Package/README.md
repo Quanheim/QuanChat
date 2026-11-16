@@ -8,7 +8,7 @@ connect. On a dedicated server it does nothing except keep everyone's version in
 
 ## Server owners: let players keep their own chat settings
 
-Every QuanChat setting is personal: window size, font, fading and the rest are up to each player. If you hand out
+QuanChat's chat settings are personal: window size, font, fading and the rest are up to each player. If you hand out
 your modpack's configs through a Gale profile (or any managed config sync), **untick `quandru.QuanChat.cfg` in the
 export** so players' own settings aren't overwritten or deleted on each sync.
 
@@ -39,7 +39,10 @@ it. Start the server once with QuanChat installed, then in Gale open the profile
 
 ## Settings
 
-All personal: each player sets their own, and nothing is synced from the server.
+Sections 0 to 2 are personal: each player sets their own. Section 3 is the server's: every player gets the server's
+values, and only admins can change them (in F1). For now it holds a single placeholder while the server side is
+built; it changes nothing in game. Excluding `quandru.QuanChat.cfg` from a Gale export doesn't affect it: the
+server's own copy is what counts.
 
 | Section | Setting | Default | What it does |
 |---|---|---|---|
@@ -54,6 +57,7 @@ All personal: each player sets their own, and nothing is synced from the server.
 | | Space between messages | Off | A small gap between messages. |
 | | Hide shout map pings | On | Shouts don't flash a pin on your map. |
 | | Font size | 18 | Size of the chat text, in points. The input box grows with it. |
+| 3 - Server (admin only) | Test value | default | Placeholder for testing server settings; changes nothing in game. |
 
 ## Source and issues
 
