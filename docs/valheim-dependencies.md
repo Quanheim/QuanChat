@@ -65,7 +65,6 @@ a change in behaviour isn't, so list the ones whose behaviour the mod depends on
 | `Console.IsVisible` | No scrolling while the F5 console is open. |
 | `TextInput.IsVisible` | No scrolling while a sign or text popup is open. |
 | `ZInput.GetButtonDown` | Reads `ScrollChatUp`/`ScrollChatDown` (and the Joy versions) while not typing. |
-
 ### Behaviour the mod assumes
 
 Things the game does that the mod counts on without calling them, e.g. "only the owner runs
@@ -98,3 +97,4 @@ after each update.
 | Chat input placeholder (`m_input.placeholder`, a TextMeshPro text) | Shows `[Shout]` / `[Say]` before vanilla's placeholder text. | The placeholder stops being TextMeshPro text: the indicator silently stops. |
 | BepInEx Configuration Manager (`com.bepis.bepinex.configurationmanager`, optional mod) | Its public `DisplayingWindow` property, read by reflection, keeps the chat up while its window is open. | Renamed: the chat hides behind the Esc menu again while changing settings. |
 | Key bindings `ScrollChatUp`, `ScrollChatDown` (Page Up, Page Down) | Scrolling without typing. | Renamed in `ZInput`. |
+| Jotunn `SynchronizationManager` (2.30.2, not game code) | Syncs admin-only settings in `quandru.QuanChat.cfg` (`IsAdminOnly`, test build only so far). Relied on: it sends the server's values to every player on connect, ignores a connected player's own copy, shows them locked in F1 for non-admins, and sends an admin's F1 change to the server, which saves it and passes it on. | Jotunn changes admin-only sync: the server's value stops reaching players, or admins can't change it in F1. |
